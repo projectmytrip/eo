@@ -1,0 +1,1715 @@
+{
+	"info": {
+		"_postman_id": "3c5d43be-6c0c-4e76-9858-acdbb370094c",
+		"name": "Gdpr",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authorization",
+			"item": [
+				{
+					"name": "Resfresh Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"grant_type\": \"refresh_token\",\r\n    \"refreshToken\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlckBzcHJpbmcuc2VjdXJpdHkuc2FtbCIsInJlZ2lvbnMiOlsiUjIiXSwiaXNzIjoic3QtcmVnaXN0cnkuZ2Rwci5yZXBseS5pdFwvYXBpXC9jb21wbGlhbmNlXC9nZHByXC9hdXRob3JpemF0aW9uXC9hdXRoIiwicmVmcmVzaCI6dHJ1ZSwiY291bnRyaWVzIjpbXSwidXNlcklkIjoyMSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9EUE8iLCJQUk9GSUxFX0RQTyIsImFyY2hpdmU6cmVhZCIsInJlcG9ydDpyZWFkIiwicmVnaXN0cnk6dmFsaWRhdGVfZHBvIiwiY2FtcGFpZ246cmVhZCIsInJlZ2lzdHJ5OnJlamVjdF9kcG8iLCJjYW1wYWlnbjp3cml0ZSIsImFyY2hpdmU6ZWRpdCIsImRlbGVnYXRlOndyaXRlIl0sImF1ZCI6InVybjpzdC1yZWdpc3RyeS5nZHByLnJlcGx5Lml0IiwiY29tcGFuaWVzIjpbXSwiZXhwIjoxNjIxNTg1NDgxLCJpYXQiOjE2MjAyODk0ODEsImp0aSI6ImVlNzk1OWY4LTI5NTYtNGQ4Ny1hODMzLTc3NzMzYzM5ZmE3MSJ9.cr1nEWjct8fNAzQfs6dXJsCdwd8kpQXVe8OTelTQcMU\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{authorizationPort}}/api/compliance/gdpr/authorization/auth/token/refresh",
+							"host": [
+								"{{host}}{{authorizationPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"authorization",
+								"auth",
+								"token",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Access Token",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "JSESSIONID=7777E88400E2A2CE20AC8B43B86CD5D",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}{{authorizationPort}}/api/compliance/gdpr/authorization/auth/token/access",
+							"host": [
+								"{{host}}{{authorizationPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"authorization",
+								"auth",
+								"token",
+								"access"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"m.potok\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{authorizationPort}}/api/compliance/gdpr/authorization/auth/login",
+							"host": [
+								"{{host}}{{authorizationPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"authorization",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SAML login",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{authorizationPort}}/api/compliance/gdpr/authorization/auth/login",
+							"host": [
+								"{{host}}{{authorizationPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"authorization",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SAML Response Consumer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "SAMLResponse",
+									"value": "PHNhbWxwOlJlc3BvbnNlIElEPSJfOTdhZjAxM2YtMWEwOC00MWE3LTgwZTEtN2NkMDk1MWY5ZmEzIiBWZXJzaW9uPSIyLjAiIElzc3VlSW5zdGFudD0iMjAyMS0wNS0yNFQxMDo1MzowNC42ODZaIiBEZXN0aW5hdGlvbj0iaHR0cHM6Ly90ZXN0LWdkcHIucmVwbHkuY29tL2xvZ2luL3NhbWwyL3Nzby9nZHBycmVwbHkiIENvbnNlbnQ9InVybjpvYXNpczpuYW1lczp0YzpTQU1MOjIuMDpjb25zZW50OnVuc3BlY2lmaWVkIiBJblJlc3BvbnNlVG89IkFSUTBhZDliYzQtZThmNy00MTJlLWFjNDYtZGQ1ZDUwNDgyODAwIiB4bWxuczpzYW1scD0idXJuOm9hc2lzOm5hbWVzOnRjOlNBTUw6Mi4wOnByb3RvY29sIj48SXNzdWVyIHhtbG5zPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6YXNzZXJ0aW9uIj5odHRwOi8vc3RzdGVzdDMucmVwbHkuaXQvYWRmcy9zZXJ2aWNlcy90cnVzdDwvSXNzdWVyPjxzYW1scDpTdGF0dXM+PHNhbWxwOlN0YXR1c0NvZGUgVmFsdWU9InVybjpvYXNpczpuYW1lczp0YzpTQU1MOjIuMDpzdGF0dXM6U3VjY2VzcyIgLz48L3NhbWxwOlN0YXR1cz48RW5jcnlwdGVkQXNzZXJ0aW9uIHhtbG5zPSJ1cm46b2FzaXM6bmFtZXM6dGM6U0FNTDoyLjA6YXNzZXJ0aW9uIj48eGVuYzpFbmNyeXB0ZWREYXRhIFR5cGU9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvMDQveG1sZW5jI0VsZW1lbnQiIHhtbG5zOnhlbmM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvMDQveG1sZW5jIyI+PHhlbmM6RW5jcnlwdGlvbk1ldGhvZCBBbGdvcml0aG09Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvMDQveG1sZW5jI2FlczI1Ni1jYmMiIC8+PEtleUluZm8geG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyMiPjxlOkVuY3J5cHRlZEtleSB4bWxuczplPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGVuYyMiPjxlOkVuY3J5cHRpb25NZXRob2QgQWxnb3JpdGhtPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGVuYyNyc2Etb2FlcC1tZ2YxcCI+PERpZ2VzdE1ldGhvZCBBbGdvcml0aG09Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDkveG1sZHNpZyNzaGExIiAvPjwvZTpFbmNyeXB0aW9uTWV0aG9kPjxLZXlJbmZvPjxkczpYNTA5RGF0YSB4bWxuczpkcz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyI+PGRzOlg1MDlJc3N1ZXJTZXJpYWw+PGRzOlg1MDlJc3N1ZXJOYW1lPkNOPXNwLnNwcmluZy5zZWN1cml0eS5zYW1sLCBPVT1zcCwgTz1TcHJpbmcgU2VjdXJpdHkgU0FNTCwgTD1WYW5jb3V2ZXIsIFM9V2FzaGluZ3RvbiwgQz1VUzwvZHM6WDUwOUlzc3Vlck5hbWU+PGRzOlg1MDlTZXJpYWxOdW1iZXI+MTI1NjI1NzYzODY3ODQ2OTQ5ODQ8L2RzOlg1MDlTZXJpYWxOdW1iZXI+PC9kczpYNTA5SXNzdWVyU2VyaWFsPjwvZHM6WDUwOURhdGE+PC9LZXlJbmZvPjxlOkNpcGhlckRhdGE+PGU6Q2lwaGVyVmFsdWU+U1A5UXFmOTYzaWVKVnJDQ204RFNxTXpVRlVDbHRIOG96SE1SZU4wMTZIQnFYaVZLRS9tTjlvTmZERDJnckdzejhTUlN1ZDd0S0VUck1NUFJCQXRpLzgzU0NoQzlKdFNvblNhSDZueHl5U2dTeVJvYVhSbkZiQXIvS3M2TzVrZHhONW1Va2dYaEdSbnRva2dRMW9YWUNZaTdyajA2L3N4allySlNxZDFWNU5NPTwvZTpDaXBoZXJWYWx1ZT48L2U6Q2lwaGVyRGF0YT48L2U6RW5jcnlwdGVkS2V5PjwvS2V5SW5mbz48eGVuYzpDaXBoZXJEYXRhPjx4ZW5jOkNpcGhlclZhbHVlPnlFN2wyS0hySTFtT3VERmcraDY4Nmh4ZXVKMFp3Mzd1TXlvblFQUFREdXBXa09KRlVIZzVWRHMrNjhxODRJUW9VUVYyRFI5ajZxcDRrOVBveHc3QnM5NjFmSm1lOFY0RXA5SHU0K0c3UmJITnBQaTdrVjdoUkc2bE9oZGxUZUZXOVFiQWF1U01JZk5tY0hWQzBSUDAzMGJEam90NERvM0pMcDNLYlFLUUJXQk5BV0pTSElySmowMXlmNE05WVZ6eVdGb0dmLzVEOWdrMVJVZHYzSU5iY3pEUHhuNTZoOWpDbzQ5QkRlbGc3dUJEUmJsT0lRNUlqNzNBd0JLeUpDRXpIaXJpKzF1aFpjSHozN0h5L1R6dGtRQTR3UG5vRDh5czZtWGxVbVdyaUpEQ2c2aXk3aHgwbTBMckRnc2VBTm9VZlljWmZCN0x0endGTUYwdmErVWFYTGpvbUt3emFIY0Q5bGRWcXl4RFIwRVlGbXdNRlVmaDhLMnlLb3IreVdLSnR6R3B5enVZNHk2bmdYL3BMcHk2cVpkS2ZYSjljemxvandJc3RhaDFYMis2ay9LN3VUTURVVStKdXg2aGpQMURIOXRmM1MxODRscUxkNjU0UWNweUh3WVd5RjcxY0NNeWNrZnlLcXZ3SVlvWDFtSGUwRTZQSEh0TzBTeGNjMXZGbFNaQW1ETUhhQnZrUTFpdlVrUUMzMzlaaFEwWDRVS00zVVA1T3ZLVFE1RkVnbTJrdnJHMEhhaEplYU1kcm5kSlZuTDJGeGUvMlRIYTNRRU1ncXArbks3eWd2V1I0eDhLQTNZZGczemVSZkRyLzRnR1p4elYzUjQzQ3VhRjdFTDJ4ZmV0cUVBLzZIYk1tVEpMeHZoRm9JU0N2VUt5Uk1kMUE0eTlWZDBibW9WeTg0TXlFbXNYZ2g2SU9lWk5veE5lSk5sMzZHL1VSY2ZiUzlRTkZwbWVVc2tSYzBFM0liY0FzWGxwUlZoRlk0VTh1cXpOSnUra082eUJneTdYbmY4V3RCTDdMdTVjUWZyVkdXYjQ4dXhpdS9RbGdGWGtNQzErNTU1SlV3MkdhcXA4UW9xMDA2eTk5ZVM2NFNYbmNVbzJaeURjd1VmK2JBQ2JtbVU1bGhHeHNYY1JmNTFiN2RVTE5neis4OFh2RjVOemJxM09TS0tQemZweW1yQ2tSU3RGcHFpUlQzSGNVdFBPejVvUXVPRU15V09DaG5FY21peUgxSm1Nc0xJQ2tsMklGYVZHM1dab2ZpeXNoek16dzZPdThzQ2xLZW5ydHE3cnlPM3Z1dHV5SXM0VGxndGxLY0ptUlhMZWNsbHQ4MWZjYjdUS2d6VUdhV3VlNnkvVkNnZzVIUHJ3NTZ6N1F6bU5BNkxqZG9iY3B4WUlqLy92am0vMWlVYWcvRkU0Q3V6SUFlTDkzQnJ3R1RwdGxhZXlnL0xETXlqdTZKQkdNdW9FL1c0c2ZlWDNlZS94bzMwaVhheXlCTlR3Z0FsWkZMcisxSS85WHBZdEM2blRyWC96MWVXLzh4T0thVFRqenI4R1JMWCtXMGJCZ0U3NCthVWpSTGdwVGJPRXd6aHlaRmlXd0l4NCt3VUdkZUcyRGNYeUlHRWUva25zNlpVM2lBd21ndkRVUGtkem1NajBEUFlhOUNHSUE3a3BCZ0ZzVXRIUVRwdk84Nm51d0F2b1RDUnBNUHlVcHRkL2NrMFlUSHlRcGZOTVpWVGhVT3NpaGFkTWVxZW90NVo3Sm9vbFpLUEp3S0V0SGZtMk44L1ZBcENrTVR2Q242VjBYelBlc2puUGtVVlBpbXhERXBWU2g5cXNUbHFoQ3NjbGZ1WW9lcWUzSDN3T2greitoak5XS09iY3dUZ1F2emFkNlBRRE9DL0lGZ2VIQkdqMk9rWUJXdnExQlB4NENiTkNESndzZG12dy84eGdGbWZtdkFiM3FoM3phbDA3OVlpWUI0S1ljOStZMG1XanF5ZWo0U09ZRGdYSkYwKzVKUFprc1RtVFFaVUZQL1lDU2l5dHZ2anN6eG1FUVdQeFA1Lzl1ejNmZVN3d3haNnRCcCtPMnVHM3FzT1JHR0wyQm41SzZaMlhqZnhvTEc2M0dHR0ZBem9Zc3JqUUNhaUI1OGY2UnFsWG9paTR5c1VJS0xIUVJjbUQ5SFFibGlYVG9WaWZPekpQYW55dlFEbmF3UWNIak5ETENFU2Y0aDlMZGZubEs3NFhvOFg0QzVBaGRkT3FlNUJTRGtzc2MxSTluWGUveG9Bay81ei83Z3hjRUR2UlhDZ2pjYWRXR1hEUTVMTTRSWnY4V2FCVTZUUHZEajVzam5kc3NTZUdIV0FGbEVRSUVzNmovcWdKT3VZMm56a0VkbkhYR0dmZWwxNDBaVHQrQTN5OGlaaDFqaDNzNWg3WlVuQ0wwVGNHTDFzbnFPOUErZ1pwZmdJRDNKUUdDSzlJcW9JZy9BcWFMdHQ0RUNlMWxoQUI4WXZqaDNzV0V6L2xUNHFtTHo3V2VvUW9yMWdueUdJLzNXdUpTczlrYVQ4RytlNEUvblVqVDVGendMVTViNGFqVDNjdjRkVUZZVXNmKzkxVVpSUWFhWjE4dEdmTVJnZnNrUGJjOTc4Y1VKYkpRS1V5VmpkTlVBR3NFZGJLVnc1bkYwRi9rRFhpalVlZFdKYXQrZVUrREhaUmdRNjhKY1NMUVFPM3U1MGR2OW44ODVlWFNZVzdmeGRVbW1saTU1bW45WWRWMzBIdmJQTjVWYnQrNWI4K1JxTXdPcnB5T2tEem45a3BlbFFpSng0Z09mMnFtNGtONXRXWUpMSzIyakNCTTVvRU5TTkZ2RjFLcWVidlB0VzFZSVBuZjloMXFPN09XNnI4ZWlmenpWQjlEdkZCU2ZLRVREZHRuNGVMWW05TjR2VkJBQ05NUXFCMDd2OEI3UHQvako1SmZWTTJGZjI5a1lzajdpWDY3MXJtVVdLeHVXMC80MjZyVmNaYU9LSXdSMlFnbWlZNE10dG1BY283Lzh6M1FYRUtDS1RMZzBIU1QxYURVeWFKblJjUEVtTWczYngwTC9uYmMzcXZGYm9sQ1JtNWlucmxJRFM0NXZVRVJvOVg2Q0Vnc043a2QvN0FXM3grNURHdkd3a0VoNUFrT0R2RHI2ZTdpZnIxQ2V6a1lBV1NpVnJNcWh1cnhUYm9UeVBod1BoV3BTcXNQa1RWZHZBWU5JWU12ai85MHFlM2JUYkwwcFA3M3J1K1BoWDIrdlF0N29kdE8wWmhxRVZXeExYQmZMa2daTGFlOE9NdGRycjByTXRUZFo1NnA4d0NUUkEvcVlxdmNWcTd1eFdaYWkxOW53cXR4U01lMnVwdDVLL3FHa3lpOTByWVpQdHAyNTZBYmMyeU9tWVJ1R3BoR2c5TldFeWtOS25TTkRweFM5WlJJRlJHN1lJVHlqbHd4Yzc4OFFrME5iUnROWEFacFlveVptZXkvcUp3TVJ0VStVcGxBY25Ha2R6b2F2Z05Ua1MzL25mQ0lVN2J4S1BnaXdxcmx2aWRSSzUrckU1ZGJKa0xKOUhoNVBSUnRkL1pJdE5weVFsVTVZak55S0I4RjN6clRJQmZjZWRvNmdZWU5aMUNKbFVBd1FRazN2UzVYcE82ZGZtMUVwYVNMbGhxSktUaUZpQTh2QjdpaDdFWHM3U3dUUUF2R0dsYi85Z1VBNUJIVzJZQkw4R1I5S3p4NDRRNGxMYmJtMFpBQVM4QnQ4cDFpOHRTa2VIdmRvWDhXYXVaYjJ0V0ZwVS9BdWRKN2tYSXk0VGtyODEvdDVQSXN2dERRckxacDQya2IzbEFjNWMrNFZzV1F4SmFDTGN0bkNUZzUra0lYcy9nbVZxYmI0bFViNTJ1YnlIcExKdlhINVQ2Y3BhUWRCaDNVdW9MZEtFbEFRVkdjRWRYekV2NEtya1NWWlg1QUJ5d21aYW9rMGNaU01raXpLN0lZeCtOMGxOQURYdnl0ZEZWM3hiTWZ0VXAwckNmV1RwcG5WTU9vQlpUdkdjVVFvY3dpNkZSY0lha2N6eFNJdDA0b0F2QWkzOTdETHlpY3czaEpnaWN4VEVwMndHc3JjcS9LaHlEYWNiRWVaN3ZrZkV3azBuT1RpTCtBY2Viakk0R3AwMGZrand5U3lmNFg3Mnh6QUU0U0JESXlsY3o0bWt2ODhHSFFKQzJMa2hhdVV4bnU5bm1NSUVwekVSd2RwZzJUeDVwSGYwK0JmbWFKYlBMcHFsRkhhY2Y2K1JMNXN1UkFGWCthS0lzYW45WWdxT1V0dytRbVplZjBReFQ5bVZvMDB3VjR3U2FvcDA4MnEyWC9JUjhmUFM5MFcrVmtkRTFTajY5eFVaZHVwc1l2N0t5VW54Y2puamVDcmt1OW02VzJySWxqZkwyYXdaV1BpM0tLTXhhaVBNSzUrVCtBcHZmQlduaEYwUzN4NnQ1YW04cXNFN1VadytYVi9EZXBTaDBpYzlvZnpGU0lVRGtKNHBnd1FJU3pHd3pYeHY5QlBPTE1PcUtRNm1nSmVpaE1qejNZdUhHYmtaOHdpWUh2cVV4VEpGUEhsbzRDaWhPKzdicEpZMDhqeXVNdit3TTB4ZXdDUndPSHRzeERzcmxaOE05L3dqTFBFdGdHNlRJdmR1S2R0M1pvZk15YWJTdHV0NzVCMm11YWZyMkpSQUpGaWJNTlFpOXhXSXorRHFwa0RJYThjYzlXdHhrdHl4Tkxrd0JzTVVEQlZjTkRld2xGWDI4dENUSTFMVWdvOXFlL0dZTjVncyt2blkwMi9CNXhOeHA4UjNxVjdBWlROZWJ2R1c3Qkl4c0Zpek1IVzh4dURZK1phUXJpR0RlREVSemRQbFUrbmllSnVRNlY0SVRqU3hFRzV6S1BQb3NDbmlRb1BVWUdqM3Q4ZDhaRmwrczhRUkpSL2pKQTljdWJ2TlV6cEZpUCtkQkNodCtzMWtqUEcwVUgrRTNKYlJVSzZmOTFmcmx5SXQvRGRhdkF4c2lUTkJFUjRub2JkUk5tUDYwKzV3LyswTHdpSk14b294K1lUbUJLSFQzTy9ITWU2ZStwV3dSTHVZOWJDVnpJcmRkVjBNMytZbDBMUFhZWFlVbExhd0JzYitacnpPVXpwdVIrKzkyZmlOcEpFcnRiNkRRd2kwSWRMamVhNklXOVlPM2FqbXJXdC9JbUhUYkYxbnh4SDU2VDVrR205MWRxKy9FKzhDbVEzSGxYT2Y5OHE5aEdMZmFlcWJQUWl3SklyR0RROUpOYWdwUndYNHYvK0dQdXpuRUNIcWtQTTdVaVlzN3pLR3ZIZlZGOE81amFlMjg3L0c4WTV1bnhZSlQrU05FeGY1ZU45ODdYejNTekVEUm9lUzZZclhCdEFtYjQzUmZoeXFlbHFDeXlUaUtNZFlzRm5FK2c4Y3VzQ2dJV0pVYldXeUZjdEo0ZXBxUkYzRjVmb3EvQXE0QkZpL0ZRUFdqM0ZGU0lYN3pGWUZpR3krYzh0ZElBbzdJVlN4MGNLQkNPenJNWWJ6YUtyVjZtcUpyYTErWGIrSXVrVk8wQTJtdVZ5dXZVcXRCZ1MvTmc2L2p6bGhSbnYzUlY5Tm1PaTZmUlBiN3NBZHA5b3o0aE9UaXh2cWRxUlFtKzN0bmp6Z0FXeit4bnFXMXpsTmxWcFlyWFplNWVLTlJRbWlLY005TU1oamtTVUsxUmRFRU92elh4QzdFendLL1VZNEZJR2t3Z2xncjRUNnpQMERSZkNXT09BNVVHaHJLV1huaEZjOERxZDFnSytMTXdCMDV1cUJEczZVMldOZE5LOFhFTzlhU2ZUS3kzU21hejI4WjN2YWdTTE15UDNIV1JiNWNIY0FiMGRyaUc0U0QreTNKc2s1bzl0SFdIZVlUSWJYOEUwejlXNVZVQXlteVVzQU9RLzM4d1UxMUpuaHVRZk1xdXY0L0FlU2Y1WUtINk9PWkNGa2VuU0FCU2c1VWtSclIvV3gvYWJzUTQrbUc4WmJVWjVuenhhbFNaY3JMc1Y1VHNSMngxMXN6WHRuVmVtK1Y1dC96RXlCSWsvajFqb1FlUXAva284dFVraGptdDdCMmFkTjFYVE8wdDFqczk2c2o3bUxkT1dKRFpOSzMzcG15K0dNUk5CZGhBdWV4NFZ5NnBBYWJDQ25vamVuSUowYjlMRitvODV2M2piWXdRNlN6Z1hLd2U4bzR0SGNsT21xQ2dTbWYyOWdLT3Y3NmEweFBSbjc3ZTlzbDVKRlVBeVJLTytXN0FuU1lqd2xtZ1lJSVVOOXJaY0ZRd2prbEM5bk1qOStsZ281Q0xrNFRQUDg2amZWaVNic09LTFpORTl5UmgxRFBTYjdIb2FxV1RaeDNsMGNYN29FcFVKT000a01kMmlTbkVaMEtaOU9lWUpMVVF6VDM1OTJVNzN2Q1NCK01xd2FCMlErY0J4ZENHcHpYZnc3dEE3UmVSUGZDSm02QWlYbzZEdlVSNG1mUjluZjBtWWdrUk8yeDhGSWY1eWlXWlpkVlB5L0FSYUI5Z0tmdHk0YVNLa29zLytOSHcvUTU0Y0RiUXI3WWtKK3ZzVHRhWFVkWVM4OHRod3RxUVBIZXFJbkFvQmpoaGdCdm5oMGl1OU0vVUhIOGpjUUxuOGRISndNcU5ycW5HZHhrTlR3dDNObmJnRUFHWTdpSzRlSWxCcWc2M2s2MUVuRTZSQjJNdnlXR2hLVnhYNTczV3U2d3FHTVBzOFlmbEtBMTFoUDBRVTFycm5LMG5ucEgyTmhtU00xenpjNGVtaHNMMHpZTmlSK1FlQjNHOFhlNVpaaURkNGVRdHpRUDBvdFJ2dkVCUVhGaThjMUkzTEdjdkcxMmxMTVJHOXR2SUdLM1ZmOHhSdmJMVEZuTGpKVm5JNTEvWXNONkVuZnQ2RDQvM29VMHVqMzEzWDdhSldYMzg4R2YvUkV5V2lMRjQxUFNBb3JpN2UrMzM3UzNrdEFxYm11bUtRYTdnRzRvK2pOcU9HSFAxeTRoR3VSRmN0QWNCckgrd1luQzd4K0QvbytKeEtVelJKSVN5OGRvMXowbzdYR2tYWWlOYkpORmdjaXhJU3ZWbkRwV0YrWS9SZzErb1g5eDJPOVdrSXRHekJweEV0elFkYzI4TnlSc3M5THhVUm5ZQXdGSzlRaFVPT0hnS3F3VnpCUW1oc0cyaVBMTmtwdkhzOGxLWGtOKytpTmNuOHl3WVNXYmpLTGpoV01pcEJIZGg3TUNqcnJaVTk0S2xVQlgrVGhkWEVGRnpielBWVFBLbVkzMy80eExVM3pUZE92NGtoQnUwTnlHdTFVWUdxdlJ6dlVjNjZNSDRSSTJMMjEzYkJENUtaRzV6c3AzdjZtZmNianRXVU1mYjVFcjdPUi9UNEs1SWsxbDhMWmxkM1h3RXk5NER4ZlNqNEZBZnhXOWlveExlc1pXVTkvU0Njc2YvaEZXZDlINVVHZlJXd2NETktQeXRMRlRDLy9ia0J5YWl1a2k4Q3JZeG9MR1F3YVVBbXFrZm92Z0lCT2ljZ2Y1QStXUTQydkhuWTROMVdvM2VrVzlpNmVZZG1tclI3VkgvcmFuUTVIUE1ac0xxdXpmYUZsVHZ5akJ3eG5wOUVsMzBWV3NhdGtIUnFhcHJLcHdOZGtrcHJ4YTNpSktFVFlzRzdiK21xQ1FEQU5wdStIQTBGN3BsVkk4UWljMVpJYkhGYm8relltWTlmRXVCeWF5UlhQZ0ZIZlQraEV2VlZ2L2JOSHd5d2Z0S0hTd21lYWJ3QitSQjN2Sk43NnhESmh0b1llSlpWb2tPblZObmRHZExMaE5ZV05reFIyWFZubUwya2R1U0J5czl4SVFzNjZOcXVSemViYXdXZnFFTFFTUmhyVU1vRTJ2WTI2amM2Yy9PQlJDNks3N3JxMkVWeTM4d2hVdTJrSHJMT2NxRWtDRHJwOGp5dXRJRWk1aHMwVzQzSjBzVzR5MldmUDVtd2M9PC94ZW5jOkNpcGhlclZhbHVlPjwveGVuYzpDaXBoZXJEYXRhPjwveGVuYzpFbmNyeXB0ZWREYXRhPjwvRW5jcnlwdGVkQXNzZXJ0aW9uPjwvc2FtbHA6UmVzcG9uc2U+",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}{{authorizationPort}}/api/compliance/gdpr/authorization/login/saml2/sso/gdprreply",
+							"host": [
+								"{{host}}{{authorizationPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"authorization",
+								"login",
+								"saml2",
+								"sso",
+								"gdprreply"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SAML Metadata",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{authorizationPort}}/api/compliance/gdpr/authorization/saml2/service-provider-metadata/gdprreply",
+							"host": [
+								"{{host}}{{authorizationPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"authorization",
+								"saml2",
+								"service-provider-metadata",
+								"gdprreply"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Saml login redirect",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{authorizationPort}}/api/compliance/gdpr/authorization/saml2/authenticate/gdprreply",
+							"host": [
+								"{{host}}{{authorizationPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"authorization",
+								"saml2",
+								"authenticate",
+								"gdprreply"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Identity",
+			"item": [
+				{
+					"name": "Get Companies",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{identityPort}}/api/compliance/gdpr/identity/companies?regions=R1&withDpos=true",
+							"host": [
+								"{{host}}{{identityPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"identity",
+								"companies"
+							],
+							"query": [
+								{
+									"key": "year",
+									"value": "2021",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "countryId",
+									"disabled": true
+								},
+								{
+									"key": "regions",
+									"value": "R1"
+								},
+								{
+									"key": "countries",
+									"value": "BE",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "three",
+									"disabled": true
+								},
+								{
+									"key": "withDpos",
+									"value": "true"
+								},
+								{
+									"key": "ids",
+									"value": "1,2,3",
+									"disabled": true
+								},
+								{
+									"key": "light",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "id",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Company Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{identityPort}}/api/compliance/gdpr/identity/companies/1",
+							"host": [
+								"{{host}}{{identityPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"identity",
+								"companies",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Regions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{identityPort}}/api/compliance/gdpr/identity/regions",
+							"host": [
+								"{{host}}{{identityPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"identity",
+								"regions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Countries",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{identityPort}}/api/compliance/gdpr/identity/countries",
+							"host": [
+								"{{host}}{{identityPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"identity",
+								"countries"
+							],
+							"query": [
+								{
+									"key": "regions",
+									"value": "R2",
+									"disabled": true
+								},
+								{
+									"key": "startWith",
+									"value": "i",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Profiles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{identityPort}}/api/compliance/gdpr/identity/profiles",
+							"host": [
+								"{{host}}{{identityPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"identity",
+								"profiles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Roles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{identityPort}}/api/compliance/gdpr/identity/roles",
+							"host": [
+								"{{host}}{{identityPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"identity",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Job Titles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{identityPort}}/api/compliance/gdpr/identity/jobTitles",
+							"host": [
+								"{{host}}{{identityPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"identity",
+								"jobTitles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{identityPort}}/api/compliance/gdpr/identity/users",
+							"host": [
+								"{{host}}{{identityPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"identity",
+								"users"
+							],
+							"query": [
+								{
+									"key": "regions",
+									"value": "R2",
+									"disabled": true
+								},
+								{
+									"key": "countries",
+									"value": "IT",
+									"disabled": true
+								},
+								{
+									"key": "jobTitles",
+									"value": "Partner",
+									"disabled": true
+								},
+								{
+									"key": "roles",
+									"value": "FOCAL_POINT",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "marc*",
+									"disabled": true
+								},
+								{
+									"key": "surname",
+									"value": "Te*",
+									"disabled": true
+								},
+								{
+									"key": "companies",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "isDelegate",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "surname",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{identityPort}}/api/compliance/gdpr/identity/users/21",
+							"host": [
+								"{{host}}{{identityPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"identity",
+								"users",
+								"21"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign Profile to User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"roleId\": \"ADMIN\",\r\n    \"isDelegate\": false,\r\n    \"companyValidate\": false,\r\n    \"fromDateTime\": \"\",\r\n    \"expirationDateTime\": \"\",\r\n    \"companies\": [],\r\n    \"regions\": [],\r\n    \"countries\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{identityPort}}/api/compliance/gdpr/identity/users/1",
+							"host": [
+								"{{host}}{{identityPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"identity",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change user status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"enabled\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{identityPort}}/api/compliance/gdpr/identity/users/1/status",
+							"host": [
+								"{{host}}{{identityPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"identity",
+								"users",
+								"1",
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Registry",
+			"item": [
+				{
+					"name": "Internal",
+					"item": [
+						{
+							"name": "Notify New Campaign",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 105,\r\n    \"name\": \"New Campaign - notify\",\r\n    \"registry\": true,\r\n    \"selfEvaluation\": true,\r\n    \"companies\": [\r\n        1,\r\n        2,\r\n        3,\r\n        52\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/internal/campaigns/notify",
+									"host": [
+										"{{host}}{{registryPort}}"
+									],
+									"path": [
+										"api",
+										"compliance",
+										"gdpr",
+										"registry",
+										"internal",
+										"campaigns",
+										"notify"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get RegistryTemplates",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/templates",
+							"host": [
+								"{{host}}{{registryPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"registry",
+								"templates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Last Templates",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/templates/last-template",
+							"host": [
+								"{{host}}{{registryPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"registry",
+								"templates",
+								"last-template"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get RegistryTemplate By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/templates/1",
+							"host": [
+								"{{host}}{{registryPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"registry",
+								"templates",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Template By RegistryTemplateId",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/templates/1/templates",
+							"host": [
+								"{{host}}{{registryPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"registry",
+								"templates",
+								"1",
+								"templates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Registries",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/registries",
+							"host": [
+								"{{host}}{{registryPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"registry",
+								"registries"
+							],
+							"query": [
+								{
+									"key": "years",
+									"value": "2019",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "DPO_VALIDATED",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "IN_PROGRESS",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Registry By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/registries/821",
+							"host": [
+								"{{host}}{{registryPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"registry",
+								"registries",
+								"821"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save Registry",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"year\": 2021,\r\n    \"companyId\": 52,\r\n    \"templateVersion\": 2,\r\n    \"activities\": [\r\n        {\r\n            \"answers\": [\r\n                {\r\n\t\t\t\t\t\"questionKey\": \"TYPE_OF_ACTIVITY_SERVICE\",\r\n                    \"answerDetails\": [\r\n\t\t\t\t\t\t{\r\n                            \"answerKey\": 1,\r\n\t\t\t\t\t\t\t\"text\": \"Application maintenance for the on-air process department - Opzione 1\"\r\n\t\t\t\t\t\t},\r\n\t\t\t\t\t\t{\r\n                            \"answerKey\": 3,\r\n\t\t\t\t\t\t\t\"text\": \"Application maintenance for the on-air process department - Opzione 2\"\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t]\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"answers\": [\r\n                {\r\n\t\t\t\t\t\"questionKey\": \"DESCRIPTION_PROCESSING_ACTIVITY\",\r\n\t\t\t\t\t\"answerDetails\": [\r\n\t\t\t\t\t\t{\r\n                            \"answerKey\": 1,\r\n\t\t\t\t\t\t\t\"text\": \"The main activities performed are:\\n1. Day-by-day support to end user (i.e. application maintenance tasks)\\n2. bugfixing\\n3. testing new software\\n4. support during the roll-out phase\"\r\n\t\t\t\t\t\t}\r\n                    ]\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/registries/",
+							"host": [
+								"{{host}}{{registryPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"registry",
+								"registries",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save Activity",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"answers\": [\r\n        {\r\n            \"questionKey\": \"PERSONAL_DATA_USAGE\",\r\n            \"answerDetails\": [\r\n                {\r\n                    \"answerKey\": 1,\r\n                    \"text\": \"Yes i.e. the activity/ product/ service/ project implies the processing of personal data of employees, users, subscribers, etc.\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"questionKey\": \"CATEGORY_PERSONAL_DATA\",\r\n            \"answerDetails\": [\r\n                {\r\n                    \"answerKey\": 2,\r\n                    \"text\": \"Special data (e.g. 3 person ethnic origin, political affiliation, religious beliefs, health data, data concerned sexual life, biometric data, genetic data)\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/registries/745/activities",
+							"host": [
+								"{{host}}{{registryPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"registry",
+								"registries",
+								"745",
+								"activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Activity",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"answers\": [\r\n        {\r\n            \"questionKey\": \"PERSONAL_DATA_USAGE\",\r\n            \"answerDetails\": [\r\n                {\r\n                    \"answerKey\": 1,\r\n                    \"text\": \"Yes i.e. the activity/ product/ service/ project implies the processing of personal data of employees, users, subscribers, etc.\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"questionKey\": \"CATEGORY_PERSONAL_DATA\",\r\n            \"answerDetails\": [\r\n                {\r\n                    \"answerKey\": 2,\r\n                    \"text\": \"Special data (e.g. 3 person ethnic origin, political affiliation, religious beliefs, health data, data concerned sexual life, biometric data, genetic data)\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/registries/841/activities/462",
+							"host": [
+								"{{host}}{{registryPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"registry",
+								"registries",
+								"841",
+								"activities",
+								"462"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Activities By RegistryId",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/registries/141/activities",
+							"host": [
+								"{{host}}{{registryPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"registry",
+								"registries",
+								"141",
+								"activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Legacy Documents",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/registries/legacy",
+							"host": [
+								"{{host}}{{registryPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"registry",
+								"registries",
+								"legacy"
+							],
+							"query": [
+								{
+									"key": "years",
+									"value": "2021,2020",
+									"disabled": true
+								},
+								{
+									"key": "regions",
+									"value": "R3,R2",
+									"disabled": true
+								},
+								{
+									"key": "countries",
+									"value": "IT,UK",
+									"disabled": true
+								},
+								{
+									"key": "companies",
+									"value": "1,2,3",
+									"disabled": true
+								},
+								{
+									"key": "companyName",
+									"value": "*Tech*",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "10",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get RegistryStatus",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/registryStatus",
+							"host": [
+								"{{host}}{{registryPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"registry",
+								"registryStatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Partner Validation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/registries/665/validations/partner-validate",
+							"host": [
+								"{{host}}{{registryPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"registry",
+								"registries",
+								"665",
+								"validations",
+								"partner-validate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DPO Validation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/registries/665/validations/dpo-validate",
+							"host": [
+								"{{host}}{{registryPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"registry",
+								"registries",
+								"665",
+								"validations",
+								"dpo-validate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DPO Rejection",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{registryPort}}/api/compliance/gdpr/registry/registries/665/validations/dpo-reject",
+							"host": [
+								"{{host}}{{registryPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"registry",
+								"registries",
+								"665",
+								"validations",
+								"dpo-reject"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Campaign",
+			"item": [
+				{
+					"name": "Get Campaigns",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{campaignPort}}/api/compliance/gdpr/campaign/campaigns",
+							"host": [
+								"{{host}}{{campaignPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"campaign",
+								"campaigns"
+							],
+							"query": [
+								{
+									"key": "regions",
+									"value": "R2,R1",
+									"disabled": true
+								},
+								{
+									"key": "countries",
+									"value": "BE, IT",
+									"disabled": true
+								},
+								{
+									"key": "companies",
+									"value": "1,3",
+									"disabled": true
+								},
+								{
+									"key": "selfEvaluation",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "registry",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Campaign Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{campaignPort}}/api/compliance/gdpr/campaign/campaigns/1",
+							"host": [
+								"{{host}}{{campaignPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"campaign",
+								"campaigns",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Campaign",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"New Campaign - notify dev\",\r\n    \"startDate\": \"2021-05-06\",\r\n    \"dueDate\": \"2021-05-23\",\r\n    \"registry\": true,\r\n    \"selfEvaluation\": true,\r\n    \"companies\": [\r\n        1,\r\n        2,\r\n        3,\r\n        4,\r\n        52\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{campaignPort}}/api/compliance/gdpr/campaign/campaigns",
+							"host": [
+								"{{host}}{{campaignPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"campaign",
+								"campaigns"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Campaign",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Updated Campaign\",\r\n    \"startDate\": \"2021-05-06\",\r\n    \"dueDate\": \"2021-05-23\",\r\n    \"endDate\": \"2021-05-31\",\r\n    \"registry\": true,\r\n    \"selfEvaluation\": false,\r\n    \"companies\": [\r\n        1,\r\n        2,\r\n        3,\r\n        4\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{campaignPort}}/api/compliance/gdpr/campaign/campaigns/61",
+							"host": [
+								"{{host}}{{campaignPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"campaign",
+								"campaigns",
+								"61"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Report",
+			"item": [
+				{
+					"name": "Get Activity Report",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{reportPort}}/api/compliance/gdpr/report/registries/activities",
+							"host": [
+								"{{host}}{{reportPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"report",
+								"registries",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "years",
+									"value": "2020,2021",
+									"disabled": true
+								},
+								{
+									"key": "regions",
+									"value": "R1",
+									"disabled": true
+								},
+								{
+									"key": "countries",
+									"value": "BE,IT",
+									"disabled": true
+								},
+								{
+									"key": "companies",
+									"value": "1,2",
+									"disabled": true
+								},
+								{
+									"key": "companyName",
+									"value": "*powe*",
+									"disabled": true
+								},
+								{
+									"key": "client",
+									"value": "ENI",
+									"disabled": true
+								},
+								{
+									"key": "supplier",
+									"value": "oracle",
+									"disabled": true
+								},
+								{
+									"key": "tool",
+									"value": "mysql",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "100",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Utility Mail",
+			"item": [
+				{
+					"name": "Get Template",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{mailPort}}/api/compliance/gdpr/utility/mail/templates/test_template",
+							"host": [
+								"{{host}}{{mailPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"utility",
+								"mail",
+								"templates",
+								"test_template"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Utility Scheduler",
+			"item": [
+				{
+					"name": "Reschedule All Jobs",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{schedulerPort}}/api/compliance/gdpr/utility/scheduler/internal/reschedule",
+							"host": [
+								"{{host}}{{schedulerPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"utility",
+								"scheduler",
+								"internal",
+								"reschedule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Trigger to Job",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobName\": \"campaign_start\",\r\n    \"jobGroup\": \"gdpr\",\r\n    \"triggerName\": \"campaign_1\",\r\n    \"triggerGroup\": \"gdpr\",\r\n    \"executionDate\": \"2021-07-04T14:45:47Z\",\r\n    \"repeatCount\": 0,\r\n    \"repeatInterval\": 0,\r\n    \"isCronTrigger\": false,\r\n    \"cronExpression\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{schedulerPort}}/api/compliance/gdpr/utility/scheduler/internal/triggers",
+							"host": [
+								"{{host}}{{schedulerPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"utility",
+								"scheduler",
+								"internal",
+								"triggers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reschedule Trigger of Job",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobName\": \"campaign_start\",\r\n    \"jobGroup\": \"gdpr\",\r\n    \"executionDate\": \"2021-07-04T14:45:47Z\",\r\n    \"repeatCount\": 0,\r\n    \"repeatInterval\": 0,\r\n    \"isCronTrigger\": false,\r\n    \"cronExpression\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}{{schedulerPort}}/api/compliance/gdpr/utility/scheduler/internal/triggers/gdpr/campaign_1",
+							"host": [
+								"{{host}}{{schedulerPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"utility",
+								"scheduler",
+								"internal",
+								"triggers",
+								"gdpr",
+								"campaign_1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Trigger from Job",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}{{schedulerPort}}/api/compliance/gdpr/utility/scheduler/internal/triggers/gdpr/campaign_1",
+							"host": [
+								"{{host}}{{schedulerPort}}"
+							],
+							"path": [
+								"api",
+								"compliance",
+								"gdpr",
+								"utility",
+								"scheduler",
+								"internal",
+								"triggers",
+								"gdpr",
+								"campaign_1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

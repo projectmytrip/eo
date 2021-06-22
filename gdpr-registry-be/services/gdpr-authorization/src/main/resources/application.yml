@@ -1,0 +1,328 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/compliance/gdpr/authorization
+logging:
+  file:
+    path: /logs/compliance/gdpr/authorization
+
+spring:
+  profiles:
+    active: @spring.profiles.active@
+  datasource:
+    driverClassName: oracle.jdbc.OracleDriver
+  jmx:
+    enabled: false
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle12cDialect
+    hibernate.ddl-auto: never
+    generate-ddl: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: CET
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          access-token-details:
+            duration: 5m
+          refresh-token-details:
+            duration: 15d
+          secret: ${GDPR_JWT_HS256_SECRET}
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    password: REGISTRYGDPR.9753
+    url: jdbc:oracle:thin:@ced01gecodbd01:1524/doarc
+    username: REGISTRYGDPR
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle12cDialect
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: CET
+        physical_naming_strategy: it.reply.compliance.commons.persistence.naming.DevPhysicalNamingStrategy
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          aud: urn:dev-gdpr.reply.it
+          iss: dev-gdpr.reply.it/api/compliance/gdpr/authorization/auth
+    saml2:
+      login:
+        relying-parties:
+          - entity-id: https://dev-gdpr.reply.com{basePath}/saml2/service-provider-metadata/{registrationId}
+            consumer-url: https://dev-gdpr.reply.com{basePath}
+            idp-entity-id: http://ststest3.reply.it/adfs/services/trust
+            registration-id: gdprreply
+            web-sso-url: https://ststest3.reply.it/adfs/ls
+            signing-credentials:
+              - private-key: |
+                  -----BEGIN PRIVATE KEY-----
+                  MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBANG7v8QjQGU3MwQE
+                  VUBxvH6Uuiy/MhZT7TV0ZNjyAF2ExA1gpn3aUxx6jYK5UnrpxRRE/KbeLucYbOhK
+                  cDECt77Rggz5TStrOta0BQTvfluRyoQtmQ5Nkt6Vqg7O2ZapFt7k64Sal7AftzH6
+                  Q2BxWN1y04bLdDrH4jipqRj/2qEFAgMBAAECgYEAj4ExY1jjdN3iEDuOwXuRB+Nn
+                  x7pC4TgntE2huzdKvLJdGvIouTArce8A6JM5NlTBvm69mMepvAHgcsiMH1zGr5J5
+                  wJz23mGOyhM1veON41/DJTVG+cxq4soUZhdYy3bpOuXGMAaJ8QLMbQQoivllNihd
+                  vwH0rNSK8LTYWWPZYIECQQDxct+TFX1VsQ1eo41K0T4fu2rWUaxlvjUGhK6HxTmY
+                  8OMJptunGRJL1CUjIb45Uz7SP8TPz5FwhXWsLfS182kRAkEA3l+Qd9C9gdpUh1uX
+                  oPSNIxn5hFUrSTW1EwP9QH9vhwb5Vr8Jrd5ei678WYDLjUcx648RjkjhU9jSMzIx
+                  EGvYtQJBAMm/i9NR7IVyyNIgZUpz5q4LI21rl1r4gUQuD8vA36zM81i4ROeuCly0
+                  KkfdxR4PUfnKcQCX11YnHjk9uTFj75ECQEFY/gBnxDjzqyF35hAzrYIiMPQVfznt
+                  YX/sDTE2AdVBVGaMj1Cb51bPHnNC6Q5kXKQnj/YrLqRQND09Q7ParX0CQQC5NxZr
+                  9jKqhHj8yQD6PlXTsY4Occ7DH6/IoDenfdEVD5qlet0zmd50HatN2Jiqm5ubN7CM
+                  INrtuLp4YHbgk1mi
+                  -----END PRIVATE KEY-----
+                certificate: |
+                  -----BEGIN CERTIFICATE-----
+                  MIICgTCCAeoCCQCuVzyqFgMSyDANBgkqhkiG9w0BAQsFADCBhDELMAkGA1UEBhMC
+                  VVMxEzARBgNVBAgMCldhc2hpbmd0b24xEjAQBgNVBAcMCVZhbmNvdXZlcjEdMBsG
+                  A1UECgwUU3ByaW5nIFNlY3VyaXR5IFNBTUwxCzAJBgNVBAsMAnNwMSAwHgYDVQQD
+                  DBdzcC5zcHJpbmcuc2VjdXJpdHkuc2FtbDAeFw0xODA1MTQxNDMwNDRaFw0yODA1
+                  MTExNDMwNDRaMIGEMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3RvbjES
+                  MBAGA1UEBwwJVmFuY291dmVyMR0wGwYDVQQKDBRTcHJpbmcgU2VjdXJpdHkgU0FN
+                  TDELMAkGA1UECwwCc3AxIDAeBgNVBAMMF3NwLnNwcmluZy5zZWN1cml0eS5zYW1s
+                  MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDRu7/EI0BlNzMEBFVAcbx+lLos
+                  vzIWU+01dGTY8gBdhMQNYKZ92lMceo2CuVJ66cUURPym3i7nGGzoSnAxAre+0YIM
+                  +U0razrWtAUE735bkcqELZkOTZLelaoOztmWqRbe5OuEmpewH7cx+kNgcVjdctOG
+                  y3Q6x+I4qakY/9qhBQIDAQABMA0GCSqGSIb3DQEBCwUAA4GBAAeViTvHOyQopWEi
+                  XOfI2Z9eukwrSknDwq/zscR0YxwwqDBMt/QdAODfSwAfnciiYLkmEjlozWRtOeN+
+                  qK7UFgP1bRl5qksrYX5S0z2iGJh0GvonLUt3e20Ssfl5tTEDDnAEUMLfBkyaxEHD
+                  RZ/nbTJ7VTeZOSyRoVn5XHhpuJ0B
+                  -----END CERTIFICATE-----
+            verification-credentials:
+              - |
+                -----BEGIN CERTIFICATE-----
+                MIIGpzCCBY+gAwIBAgITIAAAsVkHkoZ3AEeDegAHAACxWTANBgkqhkiG9w0BAQsF
+                ADCBizElMCMGCSqGSIb3DQEJARYWYWRtaW5pc3RyYXRvckByZXBseS5pdDELMAkG
+                A1UEBhMCSVQxCzAJBgNVBAgTAlRPMQ4wDAYDVQQHEwVUdXJpbjEOMAwGA1UEChMF
+                UkVQTFkxFDASBgNVBAsTC0hlYWRxdWFydGVyMRIwEAYDVQQDEwlSZXBseS5ORVQw
+                HhcNMTUwNzIzMDgxMzA5WhcNMjUwNzIwMDgxMzA5WjAcMRowGAYDVQQDExFzdHN0
+                ZXN0My5yZXBseS5pdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKNJ
+                tGPsL8/Q2EvY76gsaCO27KbI25ofmaY9j/HG2G6VYYy+TUJyetnawLsRNKtILXNj
+                j5k6V2j6DYozxlr7RHvPrmAtT6ZK+6nR0JMuFBsMJPkhbYopXNthsh49rjIxvfEB
+                4wulwUdnpkBsFYh+6gis1bTTMeAw+lE/yPBYzVKXu8RC4yl13wMPzVTgqKQMWsaI
+                g8tqsdmi4cAEtqKZV2C4dPk5xaDJQBlmUivL2yNL6NtyvZrEVVtstpusejMlOyis
+                iJiO4xOjo7tykikM2CoXBrmxfD8k62gVDK/Ql/G5OH3hmJFj+0bseL+/vN+mpnjI
+                oGyz5vSqvRYZTFJh/6MCAwEAAaOCA3AwggNsMDsGCSsGAQQBgjcVBwQuMCwGJCsG
+                AQQBgjcVCIfZtUKE7Pw3xYEdusdhg6GydIEq6uI3guLXEAIBZAIBCjATBgNVHSUE
+                DDAKBggrBgEFBQcDATALBgNVHQ8EBAMCBaAwGwYJKwYBBAGCNxUKBA4wDDAKBggr
+                BgEFBQcDATAdBgNVHQ4EFgQUUXT7accvPRZGOAQbDXsoSKBhf20wHwYDVR0jBBgw
+                FoAU54OK8JPwL/XIC8NW+T+9h3q1pbowggE+BgNVHR8EggE1MIIBMTCCAS2gggEp
+                oIIBJYaBtGxkYXA6Ly8vQ049UmVwbHkuTkVUKDcpLENOPWJvbm5hcmQsQ049Q0RQ
+                LENOPVB1YmxpYyUyMEtleSUyMFNlcnZpY2VzLENOPVNlcnZpY2VzLENOPUNvbmZp
+                Z3VyYXRpb24sREM9cmVwbHluZXQsREM9cHJ2P2NlcnRpZmljYXRlUmV2b2NhdGlv
+                bkxpc3Q/YmFzZT9vYmplY3RDbGFzcz1jUkxEaXN0cmlidXRpb25Qb2ludIY3aHR0
+                cDovL2Jvbm5hcmQucmVwbHluZXQucHJ2L0NlcnRFbnJvbGwvUmVwbHkuTkVUKDcp
+                LmNybIYzaHR0cDovL2Jvbm5hcmQucmVwbHkuaXQvQ2VydEVucm9sbC9SZXBseS5O
+                RVQoNykuY3JsMIIBagYIKwYBBQUHAQEEggFcMIIBWDCBqQYIKwYBBQUHMAKGgZxs
+                ZGFwOi8vL0NOPVJlcGx5Lk5FVCxDTj1BSUEsQ049UHVibGljJTIwS2V5JTIwU2Vy
+                dmljZXMsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1yZXBseW5ldCxE
+                Qz1wcnY/Y0FDZXJ0aWZpY2F0ZT9iYXNlP29iamVjdENsYXNzPWNlcnRpZmljYXRp
+                b25BdXRob3JpdHkwWAYIKwYBBQUHMAKGTGh0dHA6Ly9ib25uYXJkLnJlcGx5bmV0
+                LnBydi9DZXJ0RW5yb2xsL2Jvbm5hcmQucmVwbHluZXQucHJ2X1JlcGx5Lk5FVCg3
+                KS5jcnQwUAYIKwYBBQUHMAKGRGh0dHA6Ly9ib25uYXJkLnJlcGx5Lml0L0NlcnRF
+                bnJvbGwvYm9ubmFyZC5yZXBseS5pdF9SZXBseS5ORVQoNykuY3J0MA0GCSqGSIb3
+                DQEBCwUAA4IBAQAyjFvVZPI3AbuNE9SmTyjpAkE+diJJEQKPsN+m7et8x6PvDWFg
+                Qi0hmu2df9GR9DxwnBpvD2mPff11IWZ45kTm/5N8bgWm2O+4lTqtNITqkktk71wZ
+                W+d4LrTLgmvuB+0c35ufbYAPhwWfbfQ3/6LK/X4KZ4PF/9YQfoaOXDgZLPWv2+Mt
+                40atOYYp2pJOELpX40j+ApO6LUdVbv9CydTV4m1DNhagxjtM4rZevNiwpkfRlPUk
+                zxMFoXvbfNOkji936UU4UXcd+iLuP5wD8SzaBtBhzsfF5GW55rGme57bn1WwUq+w
+                nDm81eREJdd7W7amXBq1qxcetktF/guzKf4g
+                -----END CERTIFICATE-----
+                
+logging:
+  file:
+    path: /logs/dev/compliance/gdpr/authorization
+
+springfox:
+  documentation:
+    enabled: true
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          aud: urn:test-gdpr.reply.it
+          iss: test-gdpr.reply.it/api/compliance/gdpr/authorization/auth
+    saml2:
+      login:
+        relying-parties:
+          - entity-id: https://test-gdpr.reply.com/saml2/service-provider-metadata/{registrationId}
+            consumer-url: https://test-gdpr.reply.com
+            idp-entity-id: http://ststest3.reply.it/adfs/services/trust
+            registration-id: gdprreply
+            web-sso-url: https://ststest3.reply.it/adfs/ls
+            signing-credentials:
+              - private-key: |
+                  -----BEGIN PRIVATE KEY-----
+                  MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBANG7v8QjQGU3MwQE
+                  VUBxvH6Uuiy/MhZT7TV0ZNjyAF2ExA1gpn3aUxx6jYK5UnrpxRRE/KbeLucYbOhK
+                  cDECt77Rggz5TStrOta0BQTvfluRyoQtmQ5Nkt6Vqg7O2ZapFt7k64Sal7AftzH6
+                  Q2BxWN1y04bLdDrH4jipqRj/2qEFAgMBAAECgYEAj4ExY1jjdN3iEDuOwXuRB+Nn
+                  x7pC4TgntE2huzdKvLJdGvIouTArce8A6JM5NlTBvm69mMepvAHgcsiMH1zGr5J5
+                  wJz23mGOyhM1veON41/DJTVG+cxq4soUZhdYy3bpOuXGMAaJ8QLMbQQoivllNihd
+                  vwH0rNSK8LTYWWPZYIECQQDxct+TFX1VsQ1eo41K0T4fu2rWUaxlvjUGhK6HxTmY
+                  8OMJptunGRJL1CUjIb45Uz7SP8TPz5FwhXWsLfS182kRAkEA3l+Qd9C9gdpUh1uX
+                  oPSNIxn5hFUrSTW1EwP9QH9vhwb5Vr8Jrd5ei678WYDLjUcx648RjkjhU9jSMzIx
+                  EGvYtQJBAMm/i9NR7IVyyNIgZUpz5q4LI21rl1r4gUQuD8vA36zM81i4ROeuCly0
+                  KkfdxR4PUfnKcQCX11YnHjk9uTFj75ECQEFY/gBnxDjzqyF35hAzrYIiMPQVfznt
+                  YX/sDTE2AdVBVGaMj1Cb51bPHnNC6Q5kXKQnj/YrLqRQND09Q7ParX0CQQC5NxZr
+                  9jKqhHj8yQD6PlXTsY4Occ7DH6/IoDenfdEVD5qlet0zmd50HatN2Jiqm5ubN7CM
+                  INrtuLp4YHbgk1mi
+                  -----END PRIVATE KEY-----
+                certificate: |
+                  -----BEGIN CERTIFICATE-----
+                  MIICgTCCAeoCCQCuVzyqFgMSyDANBgkqhkiG9w0BAQsFADCBhDELMAkGA1UEBhMC
+                  VVMxEzARBgNVBAgMCldhc2hpbmd0b24xEjAQBgNVBAcMCVZhbmNvdXZlcjEdMBsG
+                  A1UECgwUU3ByaW5nIFNlY3VyaXR5IFNBTUwxCzAJBgNVBAsMAnNwMSAwHgYDVQQD
+                  DBdzcC5zcHJpbmcuc2VjdXJpdHkuc2FtbDAeFw0xODA1MTQxNDMwNDRaFw0yODA1
+                  MTExNDMwNDRaMIGEMQswCQYDVQQGEwJVUzETMBEGA1UECAwKV2FzaGluZ3RvbjES
+                  MBAGA1UEBwwJVmFuY291dmVyMR0wGwYDVQQKDBRTcHJpbmcgU2VjdXJpdHkgU0FN
+                  TDELMAkGA1UECwwCc3AxIDAeBgNVBAMMF3NwLnNwcmluZy5zZWN1cml0eS5zYW1s
+                  MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDRu7/EI0BlNzMEBFVAcbx+lLos
+                  vzIWU+01dGTY8gBdhMQNYKZ92lMceo2CuVJ66cUURPym3i7nGGzoSnAxAre+0YIM
+                  +U0razrWtAUE735bkcqELZkOTZLelaoOztmWqRbe5OuEmpewH7cx+kNgcVjdctOG
+                  y3Q6x+I4qakY/9qhBQIDAQABMA0GCSqGSIb3DQEBCwUAA4GBAAeViTvHOyQopWEi
+                  XOfI2Z9eukwrSknDwq/zscR0YxwwqDBMt/QdAODfSwAfnciiYLkmEjlozWRtOeN+
+                  qK7UFgP1bRl5qksrYX5S0z2iGJh0GvonLUt3e20Ssfl5tTEDDnAEUMLfBkyaxEHD
+                  RZ/nbTJ7VTeZOSyRoVn5XHhpuJ0B
+                  -----END CERTIFICATE-----
+            verification-credentials:
+              - |
+                -----BEGIN CERTIFICATE-----
+                MIIGpzCCBY+gAwIBAgITIAAAsVkHkoZ3AEeDegAHAACxWTANBgkqhkiG9w0BAQsF
+                ADCBizElMCMGCSqGSIb3DQEJARYWYWRtaW5pc3RyYXRvckByZXBseS5pdDELMAkG
+                A1UEBhMCSVQxCzAJBgNVBAgTAlRPMQ4wDAYDVQQHEwVUdXJpbjEOMAwGA1UEChMF
+                UkVQTFkxFDASBgNVBAsTC0hlYWRxdWFydGVyMRIwEAYDVQQDEwlSZXBseS5ORVQw
+                HhcNMTUwNzIzMDgxMzA5WhcNMjUwNzIwMDgxMzA5WjAcMRowGAYDVQQDExFzdHN0
+                ZXN0My5yZXBseS5pdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKNJ
+                tGPsL8/Q2EvY76gsaCO27KbI25ofmaY9j/HG2G6VYYy+TUJyetnawLsRNKtILXNj
+                j5k6V2j6DYozxlr7RHvPrmAtT6ZK+6nR0JMuFBsMJPkhbYopXNthsh49rjIxvfEB
+                4wulwUdnpkBsFYh+6gis1bTTMeAw+lE/yPBYzVKXu8RC4yl13wMPzVTgqKQMWsaI
+                g8tqsdmi4cAEtqKZV2C4dPk5xaDJQBlmUivL2yNL6NtyvZrEVVtstpusejMlOyis
+                iJiO4xOjo7tykikM2CoXBrmxfD8k62gVDK/Ql/G5OH3hmJFj+0bseL+/vN+mpnjI
+                oGyz5vSqvRYZTFJh/6MCAwEAAaOCA3AwggNsMDsGCSsGAQQBgjcVBwQuMCwGJCsG
+                AQQBgjcVCIfZtUKE7Pw3xYEdusdhg6GydIEq6uI3guLXEAIBZAIBCjATBgNVHSUE
+                DDAKBggrBgEFBQcDATALBgNVHQ8EBAMCBaAwGwYJKwYBBAGCNxUKBA4wDDAKBggr
+                BgEFBQcDATAdBgNVHQ4EFgQUUXT7accvPRZGOAQbDXsoSKBhf20wHwYDVR0jBBgw
+                FoAU54OK8JPwL/XIC8NW+T+9h3q1pbowggE+BgNVHR8EggE1MIIBMTCCAS2gggEp
+                oIIBJYaBtGxkYXA6Ly8vQ049UmVwbHkuTkVUKDcpLENOPWJvbm5hcmQsQ049Q0RQ
+                LENOPVB1YmxpYyUyMEtleSUyMFNlcnZpY2VzLENOPVNlcnZpY2VzLENOPUNvbmZp
+                Z3VyYXRpb24sREM9cmVwbHluZXQsREM9cHJ2P2NlcnRpZmljYXRlUmV2b2NhdGlv
+                bkxpc3Q/YmFzZT9vYmplY3RDbGFzcz1jUkxEaXN0cmlidXRpb25Qb2ludIY3aHR0
+                cDovL2Jvbm5hcmQucmVwbHluZXQucHJ2L0NlcnRFbnJvbGwvUmVwbHkuTkVUKDcp
+                LmNybIYzaHR0cDovL2Jvbm5hcmQucmVwbHkuaXQvQ2VydEVucm9sbC9SZXBseS5O
+                RVQoNykuY3JsMIIBagYIKwYBBQUHAQEEggFcMIIBWDCBqQYIKwYBBQUHMAKGgZxs
+                ZGFwOi8vL0NOPVJlcGx5Lk5FVCxDTj1BSUEsQ049UHVibGljJTIwS2V5JTIwU2Vy
+                dmljZXMsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1yZXBseW5ldCxE
+                Qz1wcnY/Y0FDZXJ0aWZpY2F0ZT9iYXNlP29iamVjdENsYXNzPWNlcnRpZmljYXRp
+                b25BdXRob3JpdHkwWAYIKwYBBQUHMAKGTGh0dHA6Ly9ib25uYXJkLnJlcGx5bmV0
+                LnBydi9DZXJ0RW5yb2xsL2Jvbm5hcmQucmVwbHluZXQucHJ2X1JlcGx5Lk5FVCg3
+                KS5jcnQwUAYIKwYBBQUHMAKGRGh0dHA6Ly9ib25uYXJkLnJlcGx5Lml0L0NlcnRF
+                bnJvbGwvYm9ubmFyZC5yZXBseS5pdF9SZXBseS5ORVQoNykuY3J0MA0GCSqGSIb3
+                DQEBCwUAA4IBAQAyjFvVZPI3AbuNE9SmTyjpAkE+diJJEQKPsN+m7et8x6PvDWFg
+                Qi0hmu2df9GR9DxwnBpvD2mPff11IWZ45kTm/5N8bgWm2O+4lTqtNITqkktk71wZ
+                W+d4LrTLgmvuB+0c35ufbYAPhwWfbfQ3/6LK/X4KZ4PF/9YQfoaOXDgZLPWv2+Mt
+                40atOYYp2pJOELpX40j+ApO6LUdVbv9CydTV4m1DNhagxjtM4rZevNiwpkfRlPUk
+                zxMFoXvbfNOkji936UU4UXcd+iLuP5wD8SzaBtBhzsfF5GW55rGme57bn1WwUq+w
+                nDm81eREJdd7W7amXBq1qxcetktF/guzKf4g
+                -----END CERTIFICATE-----
+
+  jpa:
+    properties:
+      hibernate:
+        physical_naming_strategy: it.reply.compliance.commons.persistence.naming.TestPhysicalNamingStrategy
+
+springfox:
+  documentation:
+    enabled: true
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    password:
+    url:
+    username:
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          aud: urn:gdpr.reply.it
+          iss: gdpr.reply.it/api/compliance/gdpr/authorization/auth
+    saml2:
+      login:
+        relying-parties:
+          - entity-id: https://gdpr.reply.com{basePath}/saml2/service-provider-metadata/{registrationId}
+            consumer-url: https://test-gdpr.reply.com{basePath}
+            idp-entity-id: http://ststest3.reply.it/adfs/services/trust
+            registration-id: gdprreply
+            web-sso-url: https://ststest3.reply.it/adfs/ls
+            signing-credentials:
+              - private-key: |
+  
+                certificate: |
+  
+            verification-credentials:
+              - |
+                -----BEGIN CERTIFICATE-----
+                MIIGpzCCBY+gAwIBAgITIAAAsVkHkoZ3AEeDegAHAACxWTANBgkqhkiG9w0BAQsF
+                ADCBizElMCMGCSqGSIb3DQEJARYWYWRtaW5pc3RyYXRvckByZXBseS5pdDELMAkG
+                A1UEBhMCSVQxCzAJBgNVBAgTAlRPMQ4wDAYDVQQHEwVUdXJpbjEOMAwGA1UEChMF
+                UkVQTFkxFDASBgNVBAsTC0hlYWRxdWFydGVyMRIwEAYDVQQDEwlSZXBseS5ORVQw
+                HhcNMTUwNzIzMDgxMzA5WhcNMjUwNzIwMDgxMzA5WjAcMRowGAYDVQQDExFzdHN0
+                ZXN0My5yZXBseS5pdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKNJ
+                tGPsL8/Q2EvY76gsaCO27KbI25ofmaY9j/HG2G6VYYy+TUJyetnawLsRNKtILXNj
+                j5k6V2j6DYozxlr7RHvPrmAtT6ZK+6nR0JMuFBsMJPkhbYopXNthsh49rjIxvfEB
+                4wulwUdnpkBsFYh+6gis1bTTMeAw+lE/yPBYzVKXu8RC4yl13wMPzVTgqKQMWsaI
+                g8tqsdmi4cAEtqKZV2C4dPk5xaDJQBlmUivL2yNL6NtyvZrEVVtstpusejMlOyis
+                iJiO4xOjo7tykikM2CoXBrmxfD8k62gVDK/Ql/G5OH3hmJFj+0bseL+/vN+mpnjI
+                oGyz5vSqvRYZTFJh/6MCAwEAAaOCA3AwggNsMDsGCSsGAQQBgjcVBwQuMCwGJCsG
+                AQQBgjcVCIfZtUKE7Pw3xYEdusdhg6GydIEq6uI3guLXEAIBZAIBCjATBgNVHSUE
+                DDAKBggrBgEFBQcDATALBgNVHQ8EBAMCBaAwGwYJKwYBBAGCNxUKBA4wDDAKBggr
+                BgEFBQcDATAdBgNVHQ4EFgQUUXT7accvPRZGOAQbDXsoSKBhf20wHwYDVR0jBBgw
+                FoAU54OK8JPwL/XIC8NW+T+9h3q1pbowggE+BgNVHR8EggE1MIIBMTCCAS2gggEp
+                oIIBJYaBtGxkYXA6Ly8vQ049UmVwbHkuTkVUKDcpLENOPWJvbm5hcmQsQ049Q0RQ
+                LENOPVB1YmxpYyUyMEtleSUyMFNlcnZpY2VzLENOPVNlcnZpY2VzLENOPUNvbmZp
+                Z3VyYXRpb24sREM9cmVwbHluZXQsREM9cHJ2P2NlcnRpZmljYXRlUmV2b2NhdGlv
+                bkxpc3Q/YmFzZT9vYmplY3RDbGFzcz1jUkxEaXN0cmlidXRpb25Qb2ludIY3aHR0
+                cDovL2Jvbm5hcmQucmVwbHluZXQucHJ2L0NlcnRFbnJvbGwvUmVwbHkuTkVUKDcp
+                LmNybIYzaHR0cDovL2Jvbm5hcmQucmVwbHkuaXQvQ2VydEVucm9sbC9SZXBseS5O
+                RVQoNykuY3JsMIIBagYIKwYBBQUHAQEEggFcMIIBWDCBqQYIKwYBBQUHMAKGgZxs
+                ZGFwOi8vL0NOPVJlcGx5Lk5FVCxDTj1BSUEsQ049UHVibGljJTIwS2V5JTIwU2Vy
+                dmljZXMsQ049U2VydmljZXMsQ049Q29uZmlndXJhdGlvbixEQz1yZXBseW5ldCxE
+                Qz1wcnY/Y0FDZXJ0aWZpY2F0ZT9iYXNlP29iamVjdENsYXNzPWNlcnRpZmljYXRp
+                b25BdXRob3JpdHkwWAYIKwYBBQUHMAKGTGh0dHA6Ly9ib25uYXJkLnJlcGx5bmV0
+                LnBydi9DZXJ0RW5yb2xsL2Jvbm5hcmQucmVwbHluZXQucHJ2X1JlcGx5Lk5FVCg3
+                KS5jcnQwUAYIKwYBBQUHMAKGRGh0dHA6Ly9ib25uYXJkLnJlcGx5Lml0L0NlcnRF
+                bnJvbGwvYm9ubmFyZC5yZXBseS5pdF9SZXBseS5ORVQoNykuY3J0MA0GCSqGSIb3
+                DQEBCwUAA4IBAQAyjFvVZPI3AbuNE9SmTyjpAkE+diJJEQKPsN+m7et8x6PvDWFg
+                Qi0hmu2df9GR9DxwnBpvD2mPff11IWZ45kTm/5N8bgWm2O+4lTqtNITqkktk71wZ
+                W+d4LrTLgmvuB+0c35ufbYAPhwWfbfQ3/6LK/X4KZ4PF/9YQfoaOXDgZLPWv2+Mt
+                40atOYYp2pJOELpX40j+ApO6LUdVbv9CydTV4m1DNhagxjtM4rZevNiwpkfRlPUk
+                zxMFoXvbfNOkji936UU4UXcd+iLuP5wD8SzaBtBhzsfF5GW55rGme57bn1WwUq+w
+                nDm81eREJdd7W7amXBq1qxcetktF/guzKf4g
+                -----END CERTIFICATE-----
+
+springfox:
+  documentation:
+    enabled: false

@@ -1,0 +1,145 @@
+server:
+  port: 8085
+  servlet:
+    context-path: /api/compliance/gdpr/campaign/
+
+logging:
+  file:
+    path: /logs/compliance/gdpr/campaign
+
+spring:
+  profiles:
+    active: @spring.profiles.active@
+  datasource:
+    driverClassName: oracle.jdbc.OracleDriver
+  jmx:
+    enabled: false
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle12cDialect
+    hibernate.ddl-auto: never
+    generate-ddl: false
+    properties:
+      hibernate:
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          time_zone: CET
+          batch_size: 20
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          secret: ${GDPR_JWT_HS256_SECRET}
+
+api:
+  compliance:
+    gdpr:
+      registry:
+        host: http://localhost:8081
+        paths:
+          notify-campaign: /api/compliance/gdpr/registry/internal/campaigns/notify
+      scheduler:
+        host: http://localhost:8083
+        paths:
+          add-trigger: /api/compliance/gdpr/utility/scheduler/internal/triggers
+          update-trigger: /api/compliance/gdpr/utility/scheduler/internal/triggers/gdpr/campaign_%s
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev | local
+  datasource:
+    password: REGISTRYGDPR.9753
+    url: jdbc:oracle:thin:@ced01gecodbd01:1524/doarc
+    username: REGISTRYGDPR
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    properties:
+      hibernate:
+        physical_naming_strategy: it.reply.compliance.commons.persistence.naming.DevPhysicalNamingStrategy
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          aud: urn:dev-gdpr.reply.it
+          iss: dev-gdpr.reply.it/api/compliance/gdpr/authorization/auth
+logging:
+  file:
+    path: /logs/dev/compliance/gdpr/campaign
+    
+api:
+  compliance:
+    gdpr:
+      host: &be_host http://localhost:8090
+      registry:
+        host: *be_host
+      scheduler:
+        host: *be_host
+springfox:
+  documentation:
+    enabled: true
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    password: REGISTRYGDPR.9753
+    url: jdbc:oracle:thin:@ced01gecodbd01:1524/doarc
+    username: REGISTRYGDPR
+  jpa:
+    properties:
+      hibernate:
+        physical_naming_strategy: it.reply.compliance.commons.persistence.naming.TestPhysicalNamingStrategy
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          aud: urn:test-gdpr.reply.it
+          iss: test-gdpr.reply.it/api/compliance/gdpr/authorization/auth
+      
+api:
+  compliance:
+    gdpr:
+      host: &be_host http://localhost:8090
+      registry:
+        host: *be_host
+      scheduler:
+        host: *be_host
+springfox:
+  documentation:
+    enabled: true
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    password: 
+    url: 
+    username: 
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          aud: urn:gdpr.reply.it
+          iss: gdpr.reply.it/api/compliance/gdpr/authorization/auth
+      
+api:
+  compliance:
+    gdpr:
+      host: &be_host http://localhost:8080
+      registry:
+        host: *be_host
+      scheduler:
+        host: *be_host
+springfox:
+  documentation:
+    enabled: false

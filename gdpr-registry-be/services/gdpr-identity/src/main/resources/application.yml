@@ -1,0 +1,110 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /api/compliance/gdpr/identity
+
+logging:
+  file:
+    path: /logs/compliance/gdpr/identity/
+
+spring:
+  profiles:
+    active: @spring.profiles.active@
+  datasource:
+    driverClassName: oracle.jdbc.OracleDriver
+  jmx:
+    enabled: false
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle12cDialect
+    hibernate.ddl-auto: never
+    generate-ddl: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: CET
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          access-token-details:
+            duration: 5m
+          refresh-token-details:
+            duration: 15d
+          secret: ${GDPR_JWT_HS256_SECRET}
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    password: REGISTRYGDPR.9753
+    url: jdbc:oracle:thin:@ced01gecodbd01:1524/doarc
+    username: REGISTRYGDPR
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    properties:
+      hibernate:
+        physical_naming_strategy: it.reply.compliance.commons.persistence.naming.DevPhysicalNamingStrategy
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          aud: urn:dev-gdpr.reply.it
+          iss: dev-gdpr.reply.it/api/compliance/gdpr/authorization/auth
+
+logging:
+  file:
+    path: /logs/dev/compliance/gdpr/identity
+
+springfox:
+  documentation:
+    enabled: true
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    password: REGISTRYGDPR.9753
+    url: jdbc:oracle:thin:@ced01gecodbd01:1524/doarc
+    username: REGISTRYGDPR
+  jpa:
+    properties:
+      hibernate:
+        physical_naming_strategy: it.reply.compliance.commons.persistence.naming.TestPhysicalNamingStrategy
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          aud: urn:test-gdpr.reply.it
+          iss: test-gdpr.reply.it/api/compliance/gdpr/authorization/auth
+
+springfox:
+  documentation:
+    enabled: true
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    password:
+    url:
+    username:
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          aud: urn:gdpr.reply.it
+          iss: gdpr.reply.it/api/compliance/gdpr/authorization/auth
+
+springfox:
+  documentation:
+    enabled: false

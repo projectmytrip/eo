@@ -1,0 +1,129 @@
+server:
+  port: 8084
+  servlet:
+    context-path: /api/compliance/gdpr/utility/mail
+logging:
+  path: /logs/compliance/gdpr/utility/mail
+
+spring:
+  profiles:
+    active: @spring.profiles.active@
+  datasource:
+    driverClassName: oracle.jdbc.OracleDriver
+  jmx:
+    enabled: false
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle12cDialect
+    hibernate.ddl-auto: never
+    generate-ddl: false
+    properties:
+      hibernate:
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          time_zone: CET
+          batch_size: 20
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          secret: ${GDPR_JWT_HS256_SECRET}
+  mail:
+    default-encoding: UTF-8
+    host: smtprelay.replynet.prv
+    username: placeholderUsername
+    password: placeholderPassword
+    port: 25
+    protocol: smtp
+    test-connection: "false"
+    properties:
+      mail:
+        smtp:
+          auth: "true"
+          starttls:
+            enable: "true"
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    password: REGISTRYGDPR.9753
+    url: jdbc:oracle:thin:@ced01gecodbd01:1524/doarc
+    username: REGISTRYGDPR
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    properties:
+      hibernate:
+        physical_naming_strategy: it.reply.compliance.commons.persistence.naming.DevPhysicalNamingStrategy
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          aud: urn:dev-gdpr.reply.it
+          iss: dev-gdpr.reply.it/api/compliance/gdpr/authorization/auth
+  mail:
+    from: dev-gdpr@reply.com
+
+
+logging:
+  file:
+    path: /logs/dev/compliance/gdpr/utility/mail
+
+springfox:
+  documentation:
+    enabled: true
+
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    password: REGISTRYGDPR.9753
+    url: jdbc:oracle:thin:@ced01gecodbd01:1524/doarc
+    username: REGISTRYGDPR
+  jpa:
+    properties:
+      hibernate:
+        physical_naming_strategy: it.reply.compliance.commons.persistence.naming.TestPhysicalNamingStrategy
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          aud: urn:test-gdpr.reply.it
+          iss: test-gdpr.reply.it/api/compliance/gdpr/authorization/auth
+  mail:
+    from: test-gdpr@reply.com
+
+springfox:
+  documentation:
+    enabled: true
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    password:
+    url:
+    username:
+  security:
+    oauth2:
+      authorization:
+        jwt:
+          aud: urn:gdpr.reply.it
+          iss: gdpr.reply.it/api/compliance/gdpr/authorization/auth
+  mail:
+    from: gdpr@reply.com
+
+springfox:
+  documentation:
+    enabled: false
