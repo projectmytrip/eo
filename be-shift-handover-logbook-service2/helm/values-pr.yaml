@@ -1,0 +1,42 @@
+replicaCount: 1
+
+resources:
+  limits:
+    cpu: 1
+    memory: 1024Mi
+  requests:
+    cpu: 10m
+    memory: 64Mi
+
+liveness:
+  path: /liveness/ping
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  timeoutSeconds: 10
+  failureThreshold: 10
+readiness:
+  path: /liveness/ping
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  timeoutSeconds: 10
+  failureThreshold: 10
+
+applicationProperties: |-
+  application.timezone.id=UTC
+  application.locale.tag=it-IT
+
+  spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+  spring.datasource.url=jdbc:mysql://pr-db-mysql-enhanced-ope.pr.svc.cluster.local:3306/enhop_shift_handover_logbook?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+  spring.datasource.username=${APP_DB_USERNAME}
+  spring.datasource.password=${APP_DB_PASSWORD}
+  #spring.jpa.properties.hibernate.show_sql=true
+
+  microservice.users.baseaddress=http://pr-be-user-management-service-eo-1-0-0-spring-boot.pr.svc.cluster.local:8080/users
+  microservice.userexport.baseaddress=http://pr-be-user-management-service-eo-1-0-0-spring-boot.pr.svc.cluster.local:8080/export
+
+  microservice.files.baseaddress=http://pr-be-file-management-service-eo-1-0-0-spring-boot.pr.svc.cluster.local:8080/
+  microservice.files.baseaddress.external=http://pr-be-file-management-service-eo-1-0-0-spring-boot.pr.svc.cluster.local:8080/
+
+applicationSecrets:
+  app.db.username: enhop_shift_handover_logbook
+  app.db.password: 3nh0p!

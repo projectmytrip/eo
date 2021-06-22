@@ -1,0 +1,131 @@
+image: ${maven_4_pipeline_image}
+
+stages:
+  - build
+  - build_docker
+  - deploy
+  - deploy_api
+
+variables:
+  GIT_DEPTH: "1"
+  DOCKER_OPTS: "--insecure-registry=${private_docker_registry}"
+  DOCKER_HOST: "tcp://localhost:2375"
+  PROJECT_VERSION: "1-0-0"
+
+# JOBS DEFINITIONS
+.job_template: &build_job_definition
+  before_script:
+    - sed -i "s/\[USERNAME\]/${artifactory_username}/" $MAVEN_HOME/conf/settings.xml
+    - sed -i "s/\[PASSWORD\]/${artifactory_password}/" $MAVEN_HOME/conf/settings.xml
+    - sed -i "s/\[URL\]/${artifactory_url}/" $MAVEN_HOME/conf/settings.xml
+  stage: build
+  script:
+    - mkdir artifacts
+    - mvn clean install -Dmaven.test.skip=true --batch-mode
+    - cp $(ls target/*.jar) artifacts/runnable.jar
+    - mvn deploy -Dmaven.test.skip=true --batch-mode
+    - mkdir -p artifactsNS
+    - echo ${namespace} > ./artifactsNS/namespace
+  artifacts:
+    paths:
+      - artifactsNS
+      - artifacts
+    expire_in: 1 hrs
+
+.job_template: &deploy_job_definition
+  stage: deploy
+  image: ${kubectl_helm_4_pipelines_image}
+  script:
+    - NAMESPACE=$(cat ./artifactsNS/namespace)
+    - echo ${NAMESPACE}
+    - kube_config_env=$(eval "echo \"\$kube_config_$(echo $NAMESPACE|sed s/-/_/g)\"")
+    - if [ -z $kube_config_env ]; then
+    -   echo "Using default kubeconfig"
+    -   NAMESPACE_TLLR=kube-system
+    - else
+    -   kube_config=$kube_config_env
+    -   NAMESPACE_TLLR=$NAMESPACE
+    - fi
+    - echo ${kube_config} | base64 -d > ${KUBECONFIG}
+    - echo ${hcr_eni_name}
+    - echo ${hcr_eni_url_ro}
+    - echo ${chert_repo_eni_name}
+    - helm repo add $hcr_eni_name $hcr_eni_url_ro 
+    - helm repo update
+    - DEPLOYMENT_NAME=${NAMESPACE}-${CI_PROJECT_NAME}
+    - echo ${DEPLOYMENT_NAME}
+    - DEPLOYMENT_TAG=t$(echo $CI_BUILD_REF | cut -c 1-8)
+    - CHART_NAME="spring-boot"
+    - RELEASE_NAME=${DEPLOYMENT_NAME}-$PROJECT_VERSION
+    - if [ $(helm list --namespace ${NAMESPACE} --tiller-namespace ${NAMESPACE_TLLR}|grep $RELEASE_NAME |head -1|wc -l) == "0" ]; then
+    -   helm install --name $RELEASE_NAME -f helm/values-${NAMESPACE}.yaml --set image.repository=${private_docker_registry}/eni/${DEPLOYMENT_NAME} --set image.tag=${DEPLOYMENT_TAG} --set image.pullPolicy=Always $chert_repo_eni_name/spring-boot --namespace ${NAMESPACE} --tiller-namespace ${NAMESPACE_TLLR}
+    - else
+    -   helm upgrade $RELEASE_NAME -f helm/values-${NAMESPACE}.yaml --set image.repository=${private_docker_registry}/eni/${DEPLOYMENT_NAME} --set image.tag=${DEPLOYMENT_TAG} --set image.pullPolicy=Always  $chert_repo_eni_name/spring-boot --namespace ${NAMESPACE} --recreate-pods --force --tiller-namespace ${NAMESPACE_TLLR}
+    - fi
+
+build_dev:
+  variables:
+    namespace: sd
+  environment: dev
+  <<: *build_job_definition
+  only:
+    - develop
+
+build_test:
+  variables:
+    namespace: st
+  environment: test
+  <<: *build_job_definition
+  only:
+    - /^release/.*$/
+
+build_prod:
+  variables:
+    namespace: pr
+  environment: prod
+  <<: *build_job_definition
+  only:
+    - master
+    - /^hotfix/.*$/
+
+build_docker:
+  image: ${docker_image}
+  services:
+    - ${dind_4_pipelines_image}
+  stage: build_docker
+  script:
+    - NAMESPACE=$(cat ./artifactsNS/namespace)
+    - DEPLOYMENT_NAME=${NAMESPACE}-${CI_PROJECT_NAME}
+    - DEPLOYMENT_TAG=t$(echo $CI_BUILD_REF | cut -c 1-8)
+    - docker login ${private_docker_registry} -u ${private_docker_registry_username} -p ${private_docker_registry_password}
+    - docker build . -t ${private_docker_registry}/eni/${DEPLOYMENT_NAME}:${DEPLOYMENT_TAG}
+    - docker push ${private_docker_registry}/eni/${DEPLOYMENT_NAME}:${DEPLOYMENT_TAG}
+
+deploy:
+  <<: *deploy_job_definition
+  except:
+    - master
+    - /^hotfix/.*$/
+
+deploy_prod:
+  <<: *deploy_job_definition
+  only:
+    - master
+    - /^hotfix/.*$/
+  when: manual
+
+deploy_api:
+  image: ${json_interpreter_4_pipeline_image}
+  stage: deploy_api
+  script:
+    - NAMESPACE=$(cat ./artifactsNS/namespace)
+    - echo ${NAMESPACE}
+    - DEPLOYMENT_NAME=${NAMESPACE}-${CI_PROJECT_NAME}
+    - echo ${DEPLOYMENT_NAME}
+    - chmod 777 deployapiscript.sh
+    - MS_NAME=$(echo "$CI_PROJECT_NAME" | sed -e 's/^be-//')
+    - eval 'JWT_PLUBLIC_KEY_NS=$jwt_public_key_'"$NAMESPACE"''
+    - eval 'GRAVITEE_WEB_APP_ID_NS=$gravitee_web_app_id_'"$NAMESPACE"''
+    - eval 'GRAVITEE_MOBILE_APP_ID_NS=$gravitee_mobile_app_id_'"$NAMESPACE"''
+    - bash ./deployapiscript.sh "$MS_NAME" "$PROJECT_VERSION" "$DEPLOYMENT_NAME" "$NAMESPACE" "$api_gw_url" "$JWT_PLUBLIC_KEY_NS" "$gravitee_auth_token" "$GRAVITEE_WEB_APP_ID_NS" "$GRAVITEE_MOBILE_APP_ID_NS"
+  when: manual

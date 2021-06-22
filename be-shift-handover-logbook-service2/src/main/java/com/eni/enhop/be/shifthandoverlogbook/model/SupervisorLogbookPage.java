@@ -1,0 +1,10 @@
+package com.eni.enhop.be.shifthandoverlogbook.model;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue(LogbookType.SUPERVISOR)
+public class SupervisorLogbookPage extends LogbookPage {
+
+}
