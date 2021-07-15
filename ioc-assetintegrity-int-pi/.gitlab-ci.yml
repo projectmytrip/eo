@@ -1,0 +1,112 @@
+image: ${maven_4_pipeline_image}
+
+stages:  
+  - build
+  - build_docker
+  - deploy
+  - deploy_api
+
+
+variables:
+  #MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  #MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  GIT_DEPTH: "1"
+  DOCKER_OPTS: "--insecure-registry=${private_docker_registry}"
+  DOCKER_HOST: "tcp://localhost:2375"
+  PROJECT_VERSION: "1-0-0"
+ 
+build:
+  before_script:
+   - sed -i "s/\[USERNAME\]/${artifactory_username}/" $MAVEN_HOME/conf/settings.xml
+   - sed -i "s/\[PASSWORD\]/${artifactory_password}/" $MAVEN_HOME/conf/settings.xml
+   - sed -i "s/\[URL\]/${artifactory_url}/" $MAVEN_HOME/conf/settings.xml
+  stage: build
+  script:
+   - BRANCH="$(echo "${CI_COMMIT_REF_NAME}" | awk -F "/" '{print $1}')"
+   - echo "${BRANCH}"
+   - mvn clean install -P${BRANCH} -Dmaven.test.skip=true --batch-mode
+   - mvn sonar:sonar -Dsonar.host.url=${sonarqube_url} -Dsonar.login=${sonarqube_token} --batch-mode
+   - mkdir -p artifacts
+   - echo $(ls|grep "\-web$")
+   - cd $(ls|grep "\-web$")/target
+   - cp $(ls *.jar) ../../artifacts/runnable.jar
+   - cd ../..
+   - mvn deploy -Dmaven.test.skip=true  --batch-mode
+  artifacts:
+    paths:
+      - artifacts 
+    expire_in: 1 hrs
+  when: manual
+    
+
+build_docker:
+  image: ${docker_image}
+  services: 
+    - ${dind_4_pipelines_image}
+  stage: build_docker
+  script:
+    - docker login ${private_docker_registry} -u ${private_docker_registry_username} -p ${private_docker_registry_password}
+    - docker build . -t ${private_docker_registry}/eni/$CI_PROJECT_NAME:GIT$(echo $CI_BUILD_REF | cut -c 1-8)
+    - docker push ${private_docker_registry}/eni/$CI_PROJECT_NAME:GIT$(echo $CI_BUILD_REF | cut -c 1-8)
+  when: manual   
+
+
+deploy:
+  stage: deploy
+  image: ${kubectl_helm_4_pipelines_image}
+#  image: registry-dgt.eni.com/eni/kubectl-helm-chart-repo:1.0.0_de9b298d
+  script:
+    - BRANCH="$(echo "${CI_COMMIT_REF_NAME}" | awk -F "/" '{print $1}')"
+    - if [ $BRANCH == "develop" ]; then
+    -   NAMESPACE=sd-ioc
+    - elif [ $BRANCH == "feature" ]; then
+    -   NAMESPACE=sd-ioc
+    - elif [ $BRANCH == "release" ]; then
+    -   NAMESPACE=st-ioc
+    - elif [ $BRANCH == "master" ]; then
+    -   NAMESPACE=pr-ioc
+    - fi
+    - echo $NAMESPACE
+    - NM_INITIALS="$(echo "${NAMESPACE}" | awk -F "-" '{print $1}')"
+    - echo $NM_INITIALS
+    - kube_config_env=$(eval "echo \"\$kube_config_$(echo $NAMESPACE|sed s/-/_/g)\"")
+    - if [ -z $kube_config_env ]; then
+    -   echo "Using default kubeconfig"
+    -   NAMESPACE_TLLR=kube-system
+    - else
+    -   kube_config=$kube_config_env
+    -   NAMESPACE_TLLR=$NAMESPACE
+    - fi
+    - echo ${kube_config} | base64 -d > ${KUBECONFIG}
+    - echo ${hcr_eni_name}
+    - echo ${hcr_eni_url_ro}
+    - echo ${chert_repo_eni_name}
+    - helm repo add $hcr_eni_name $hcr_eni_url_ro 
+    - helm repo update
+    - if [ $(helm list --namespace ${NAMESPACE} --tiller-namespace ${NAMESPACE_TLLR} | grep ${NM_INITIALS}-$CI_PROJECT_NAME-$PROJECT_VERSION|head -1|wc -l) == "0" ]; then
+    -   helm install --name ${NM_INITIALS}-$CI_PROJECT_NAME-$PROJECT_VERSION -f helm/values-${BRANCH}.yaml --set image.repository=${private_docker_registry}/eni/$CI_PROJECT_NAME --set image.tag="GIT$(echo $CI_BUILD_REF | cut -c 1-8)" $chert_repo_eni_name/spring-boot --namespace ${NAMESPACE} --tiller-namespace ${NAMESPACE_TLLR} 
+    - else
+    -   helm upgrade ${NM_INITIALS}-$CI_PROJECT_NAME-$PROJECT_VERSION -f helm/values-${BRANCH}.yaml --set image.repository=${private_docker_registry}/eni/$CI_PROJECT_NAME --set image.tag="GIT$(echo $CI_BUILD_REF | cut -c 1-8)" $chert_repo_eni_name/spring-boot --namespace ${NAMESPACE} --tiller-namespace ${NAMESPACE_TLLR} 
+    - fi
+    - mkdir -p artifacts
+    - echo "${NAMESPACE}" > ./artifacts/namespace
+  artifacts:
+    paths:
+      - artifacts 
+    expire_in: 1 hrs	
+  when: manual
+
+deploy_api:
+  image: ${json_interpreter_4_pipeline_image}
+  stage: deploy_api
+  script:
+    - NAMESPACE=$(cat ./artifacts/namespace)
+    - cat ./artifacts/namespace
+    #- PROJECT_VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" pom.xml | grep -E '^(\d+\.)(\d+)' -o)
+    - echo ${NAMESPACE}
+    - DEPLOYMENT_NAME=${NAMESPACE}-${CI_PROJECT_NAME}
+    - echo ${DEPLOYMENT_NAME}
+    #- echo ${deploy_api} | base64 -d > deployapiscript.sh
+    - chmod 777 deployapiscript.sh
+    - bash ./deployapiscript.sh $CI_PROJECT_NAME $PROJECT_VERSION "${DEPLOYMENT_NAME}" $NAMESPACE ${api_gw_url}
+  when: manual

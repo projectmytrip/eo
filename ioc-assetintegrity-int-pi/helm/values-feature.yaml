@@ -1,0 +1,22 @@
+replicaCount: 1
+
+resources: 
+  limits:
+    cpu: 1
+    memory: 256Mi
+  requests:
+    cpu: 10m
+    memory: 64Mi
+
+liveness:
+  path: /liveness/ping
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 10
+  failureThreshold: 10
+readiness:
+  path: /liveness/ping
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 10
+  failureThreshold: 10
