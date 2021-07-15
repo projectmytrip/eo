@@ -1,0 +1,10 @@
+# Questo file contiene la lista dei path RELATIVI da esporre sull'API Gateway senza autenticazione.
+# I path devono essere inseriti su righe separate. I sotto-path sono inclusi. Esempio:
+#
+# download/file/ => disabilitera' l'autenticazione anche i sotto-path come download/file/1234567
+#
+# Di default il file viene fornito in modo da disabilitare totalmente l'autenticazione del microservizio.
+# Per abilitarla occorre decommentare la riga " /* ".
+# E' possibile inserire commenti con il carattere "#". Si raccomanda di non inserire righe vuote.
+#
+liveness/ping

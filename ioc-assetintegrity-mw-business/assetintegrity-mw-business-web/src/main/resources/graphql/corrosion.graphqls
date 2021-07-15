@@ -1,0 +1,100 @@
+extend type Query {    
+    corrosionBacteriaTable(asset: String!, area: String): CorrosionBacteriaTable
+    corrosionCNDCount(asset: String!, area: String, year: String): CorrosionCNDCount
+    corrosionPiggingTable(asset: String!, area: String): corrosionPiggingTable
+    corrosionProtectionTable(asset: String!, area: String): corrosionProtectionTable
+    corrosionCouponTable(asset: String!, area: String): corrosionCouponTable
+}
+
+type CorrosionBacteriaTable {
+    high: Int
+    critical: Int
+    data: [CorrosionBacteria]
+}
+
+type corrosionPiggingTable {
+    high: Int
+    critical: Int
+    data: [CorrosionPigging]
+}
+
+type corrosionCouponTable {
+    high: Int
+    critical: Int
+    minYear: String
+    maxYear: String
+    data: [CorrosionCoupon]
+}
+
+type corrosionProtectionTable {
+    high: Int
+    critical: Int
+    data: [CorrosionProtection]
+}
+
+type CorrosionCNDCount {
+    high: Int
+    critical: Int
+    minYear: String
+    maxYear: String
+    data: [CorrosionCND]
+}
+
+type CorrosionBacteria {
+    analysisPoint: String
+    processingUnit: String
+    product: String
+    area: String
+    srbValue: Int
+    srbStatus: Int
+    apbValue: Int
+    apbStatus: Int
+    UdM: String
+    countingEndDate: String
+    asset: String
+    insertionDate: String
+}
+
+type CorrosionCND {
+    modelName:  String,
+    expiringCount: Int,
+    expiredCount: Int
+}
+
+type CorrosionCoupon {
+    code: String
+    mpy: String
+    wellArea: String
+    nextDate: String
+    lastDate: String
+    status: Int
+}
+
+type CorrosionProtection {
+    dorsal: String
+    tag: String
+    description: String
+    protectedSideOn: String
+    protectedSideOff: String
+    notProtectedSideOn: String
+    notProtectedSideOff: String
+    tuebOn: String
+    tuebOff: String
+    externalConduitOn: String
+    externalConduitOff: String
+    lastDate: String
+    nextDate: String
+    status: Int
+
+}
+
+type CorrosionPigging  {
+    nextDate: String
+    lastDate: String
+    dorsal: String
+    feature: String
+    erf: String
+    kp: String
+    description: String
+    status: Int
+}

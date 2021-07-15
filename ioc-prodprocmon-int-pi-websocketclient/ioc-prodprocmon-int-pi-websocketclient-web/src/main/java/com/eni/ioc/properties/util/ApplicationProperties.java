@@ -1,0 +1,39 @@
+package com.eni.ioc.properties.util;
+
+public class ApplicationProperties {
+
+	private ApplicationProperties() {
+	}
+
+	public static String getPersistenceUrl() {
+		return EnvironmentAwareImpl.getProperty("persistence.url");
+	}
+	
+	public static String getPersistenceUrlProcess() {
+		return EnvironmentAwareImpl.getProperty("persistence.url.process");
+	}
+
+	public static String getCredentialPIUsername() {
+		return EnvironmentAwareImpl.getProperty("credential.pi.username");
+	}
+	
+	public static String getWssPIUrl() {
+		return EnvironmentAwareImpl.getProperty("wss.pi.url");
+	}
+
+	public static String getCredentialPIPwd() {
+		return EnvironmentAwareImpl.getProperty("credential.pi.pwd");
+	}
+	
+	public static long getWssBasetime() {
+		return Long.parseLong(EnvironmentAwareImpl.getProperty("wss.basetime"));
+	}
+	
+	public static int getWssMaxRetries() {
+		return Integer.parseInt(EnvironmentAwareImpl.getProperty("wss.maxretries"));
+	}
+	
+	public static int getWssMaxImmediateRetries() {
+		return Integer.parseInt(EnvironmentAwareImpl.getProperty("wss.maximmediateretries"));
+	}
+}

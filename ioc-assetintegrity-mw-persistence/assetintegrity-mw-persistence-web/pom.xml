@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.eni.ioc</groupId>
+        <artifactId>assetintegrity-mw-persistence</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <artifactId>assetintegrity-mw-persistence-web</artifactId>
+    <packaging>jar</packaging>
+    <name>assetintegrity-mw-persistence-web</name>
+    <version>${project.parent.version}</version>
+    <properties>
+        <dockerfile-maven-version>1.3.6</dockerfile-maven-version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <jjwt.version>0.9.0</jjwt.version>
+        <jacoco.version>0.7.9</jacoco.version>
+    </properties>
+
+    <profiles>
+        <!-- Loc -->
+        <profile>
+            <id>local</id>
+            <properties>
+                <profile>loc</profile>
+            </properties>	 
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>     
+        
+        <!-- Dev -->
+        <profile>
+            <id>develop</id>
+            <properties>
+                <profile>dev</profile>
+            </properties>
+        </profile>
+	  
+        <!-- Dev2 -->
+        <profile>
+            <id>feature</id>
+            <properties>
+                <profile>dev2</profile>
+            </properties>
+        </profile>
+	  
+        <!-- Test -->
+        <profile>
+            <id>release</id>
+            <properties>
+                <profile>test</profile>
+            </properties>
+        </profile>
+	  
+        <!-- Prod -->
+        <profile>
+            <id>master</id>
+            <properties>
+                <profile>prod</profile>
+            </properties>
+        </profile>
+    </profiles>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.eni.ioc</groupId>
+            <artifactId>assetintegrity-mw-persistence-service</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- 
+        <dependency>
+                <groupId>it.eni.microservice</groupId>
+                <artifactId>ms-common</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        -->
+		
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <!-- 
+        <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-rest</artifactId>
+        </dependency>
+        -->
+        <!-- 
+        <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        -->
+
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+		
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.1.6</version>
+		</dependency>
+		
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.3</version>
+        </dependency>	
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>${dockerfile-maven-version}</version>
+                <configuration>
+                    <repository>${project.artifactId}/${project.name}</repository>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+		
+        <filters>
+            <filter>src/main/resources/profiles/filter.${profile}.properties</filter>
+        </filters>
+		
+    </build>
+
+</project>

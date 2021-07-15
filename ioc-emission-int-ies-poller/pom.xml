@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>it.eni.msa.arch</groupId>
+		<artifactId>eni-msa-archetype</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>ioc-emission-int-ies-poller</artifactId>
+
+	<groupId>com.eni.ioc</groupId>
+	<packaging>pom</packaging>
+	<name>ioc-emission-int-ies-poller</name>
+	<version>1.0.0</version>
+	
+	<distributionManagement>
+		<repository>
+			<id>central</id>
+			<name>artifactory-artifactory-696d4b5f69-8jpj6-releases</name>
+			<url>https://artifactory-dgt.eni.com/artifactory/libs-release-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>artifactory-artifactory-696d4b5f69-8jpj6-snapshots</name>
+			<url>https://artifactory-dgt.eni.com/artifactory/libs-snapshot-local</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+  <modules>
+    <module>ioc-emission-int-ies-poller-api</module>
+    <module>ioc-emission-int-ies-poller-dao</module>
+    <module>ioc-emission-int-ies-poller-service</module>
+    <module>ioc-emission-int-ies-poller-web</module>
+  </modules>
+</project>

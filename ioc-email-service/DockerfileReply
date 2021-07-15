@@ -1,0 +1,15 @@
+FROM openjdk:8-jdk
+
+ENV JAVA_HOME              /usr/lib/jvm/java-8-openjdk-amd64
+ENV JAVA_OPTS              ""
+ENV PATH                   $PATH:$JAVA_HOME/bin
+
+ARG jarFile
+
+WORKDIR /app
+
+EXPOSE 8080
+
+COPY $jarFile /app/runnable.jar
+
+CMD ["/bin/sh", "-c", "java $JAVA_OPTS -jar runnable.jar"]

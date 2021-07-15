@@ -1,0 +1,151 @@
+image: ${maven_4_pipeline_image}
+
+stages:  
+  - build
+  - build_docker
+  - deploy
+  - deploy_api
+
+
+variables:
+  #MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  #MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  GIT_DEPTH: "1"
+  DOCKER_OPTS: "--insecure-registry=${private_docker_registry}"
+  DOCKER_HOST: "tcp://localhost:2375"
+  PROJECT_VERSION: "1-0-0"
+  SD_REPLICAS: "1"
+  SD_MEM_LIMIT: "512Mi"
+  SD_CPU_LIMIT: "300m"
+  ST_REPLICAS: "1"
+  ST_MEM_LIMIT: "512Mi"
+  ST_CPU_LIMIT: "300m"
+  PR_REPLICAS: "1"
+  PR_MEM_LIMIT: "512Mi"
+  PR_CPU_LIMIT: "500m"
+  LIVENESS: "30"
+  READINESS: "30"
+ 
+build:
+  before_script:
+   - sed -i "s/\[USERNAME\]/${artifactory_username}/" $MAVEN_HOME/conf/settings.xml
+   - sed -i "s/\[PASSWORD\]/${artifactory_password}/" $MAVEN_HOME/conf/settings.xml
+   - sed -i "s/\[URL\]/${artifactory_url}/" $MAVEN_HOME/conf/settings.xml
+  stage: build
+  script:
+   - mvn clean install -Dmaven.test.skip=true --batch-mode
+   - mkdir -p artifacts
+   - cd $(ls|grep $CI_PROJECT_NAME-web)/target
+   - cp $(ls *.jar) ../../artifacts/runnable.jar
+   - cd ../..
+   - mvn deploy -Dmaven.test.skip=true  --batch-mode
+  artifacts:
+    paths:
+      - artifacts 
+    expire_in: 1 hrs
+  when: manual
+    
+
+build_docker:
+  image: ${docker_image}
+  services: 
+    - ${dind_4_pipelines_image}
+  stage: build_docker
+  script:
+    - docker build . -t ${private_docker_registry}/eni/$CI_PROJECT_NAME:$(echo $CI_BUILD_REF | cut -c 1-8)
+    - docker login ${private_docker_registry} -u ${private_docker_registry_username} -p ${private_docker_registry_password}
+    - docker push ${private_docker_registry}/eni/$CI_PROJECT_NAME:$(echo $CI_BUILD_REF | cut -c 1-8)
+  when: manual   
+
+
+deploy_sviluppo:
+  stage: deploy
+  environment: sviluppo
+  image: ${kubectl_helm_4_pipelines_image}
+  script:
+    - NAMESPACE=sd
+    - echo ${kube_config} | base64 -d > ${KUBECONFIG}
+    - PROJECT_VERSION="1-0-0"
+    - echo $NAMESPACE
+    - echo $PROJECT_VERSION
+    - if [ $(helm list|grep ${NAMESPACE}-$CI_PROJECT_NAME-$PROJECT_VERSION|head -1|wc -l) == "0" ]; then
+    -   helm install --name ${NAMESPACE}-$CI_PROJECT_NAME-$PROJECT_VERSION --set replicaCount=${SD_REPLICAS} --set liveness.initialDelaySeconds=${LIVENESS} --set readiness.initialDelaySeconds=${READINESS} --set resources.limits.cpu=${SD_CPU_LIMIT} --set resources.limits.memory=${SD_MEM_LIMIT} --set image.repository=${private_docker_registry}/eni/$CI_PROJECT_NAME --set image.tag="$(echo $CI_BUILD_REF | cut -c 1-8)" /root/charts/eni/spring-boot-1.0.0.tgz --namespace ${NAMESPACE}
+    - else
+    -   helm upgrade ${NAMESPACE}-$CI_PROJECT_NAME-$PROJECT_VERSION --set replicaCount=${SD_REPLICAS} --set liveness.initialDelaySeconds=${LIVENESS} --set readiness.initialDelaySeconds=${READINESS} --set resources.limits.cpu=${SD_CPU_LIMIT} --set resources.limits.memory=${SD_MEM_LIMIT} --set image.repository=${private_docker_registry}/eni/$CI_PROJECT_NAME --set image.tag="$(echo $CI_BUILD_REF | cut -c 1-8)"  /root/charts/eni/spring-boot-1.0.0.tgz --namespace ${NAMESPACE}
+    - fi
+    - mkdir -p artifacts
+    - echo "${NAMESPACE}" > ./artifacts/namespace
+  artifacts:
+    paths:
+      - artifacts 
+    expire_in: 1 hrs	
+  only:
+   - develop
+  when: manual
+  
+deploy_test:
+  stage: deploy
+  environment: test
+  image: ${kubectl_helm_4_pipelines_image}
+  script:
+    - NAMESPACE=st
+    - echo ${kube_config} | base64 -d > ${KUBECONFIG}
+    - PROJECT_VERSION="1-0-0"
+    - echo $NAMESPACE
+    - echo $PROJECT_VERSION
+    - if [ $(helm list|grep ${NAMESPACE}-$CI_PROJECT_NAME-$PROJECT_VERSION|head -1|wc -l) == "0" ]; then
+    -   helm install --name ${NAMESPACE}-$CI_PROJECT_NAME-$PROJECT_VERSION --set replicaCount=${ST_REPLICAS} --set liveness.initialDelaySeconds=${LIVENESS} --set readiness.initialDelaySeconds=${READINESS} --set resources.limits.cpu=${ST_CPU_LIMIT} --set resources.limits.memory=${ST_MEM_LIMIT} --set image.repository=${private_docker_registry}/eni/$CI_PROJECT_NAME --set image.tag="$(echo $CI_BUILD_REF | cut -c 1-8)" /root/charts/eni/spring-boot-1.0.0.tgz --namespace ${NAMESPACE}
+    - else
+    -   helm upgrade ${NAMESPACE}-$CI_PROJECT_NAME-$PROJECT_VERSION --set replicaCount=${ST_REPLICAS} --set liveness.initialDelaySeconds=${LIVENESS} --set readiness.initialDelaySeconds=${READINESS} --set resources.limits.cpu=${ST_CPU_LIMIT} --set resources.limits.memory=${ST_MEM_LIMIT} --set image.repository=${private_docker_registry}/eni/$CI_PROJECT_NAME --set image.tag="$(echo $CI_BUILD_REF | cut -c 1-8)"  /root/charts/eni/spring-boot-1.0.0.tgz --namespace ${NAMESPACE}
+    - fi
+    - mkdir -p artifacts
+    - echo "${NAMESPACE}" > ./artifacts/namespace
+  artifacts:
+    paths:
+      - artifacts 
+    expire_in: 1 hrs	
+  only:
+   - /^release/.*$/
+  when: manual   
+   
+
+deploy_prod:
+  stage: deploy
+  environment: production
+  image: ${kubectl_helm_4_pipelines_image}
+  script:
+    - NAMESPACE=pr
+    - echo ${kube_config} | base64 -d > ${KUBECONFIG}
+    - PROJECT_VERSION="1-0-0"
+    - echo $NAMESPACE
+    - echo $PROJECT_VERSION
+    - if [ $(helm list|grep ${NAMESPACE}-$CI_PROJECT_NAME-$PROJECT_VERSION|head -1|wc -l) == "0" ]; then
+    -   helm install --name ${NAMESPACE}-$CI_PROJECT_NAME-$PROJECT_VERSION --set replicaCount=${PR_REPLICAS} --set liveness.initialDelaySeconds=${LIVENESS} --set readiness.initialDelaySeconds=${READINESS} --set resources.limits.cpu=${PR_CPU_LIMIT} --set resources.limits.memory=${PR_MEM_LIMIT} --set image.repository=${private_docker_registry}/eni/$CI_PROJECT_NAME --set image.tag="$(echo $CI_BUILD_REF | cut -c 1-8)" /root/charts/eni/spring-boot-1.0.0.tgz --namespace ${NAMESPACE}
+    - else
+    -   helm upgrade ${NAMESPACE}-$CI_PROJECT_NAME-$PROJECT_VERSION --set replicaCount=${PR_REPLICAS} --set liveness.initialDelaySeconds=${LIVENESS} --set readiness.initialDelaySeconds=${READINESS} --set resources.limits.cpu=${PR_CPU_LIMIT} --set resources.limits.memory=${PR_MEM_LIMIT} --set image.repository=${private_docker_registry}/eni/$CI_PROJECT_NAME --set image.tag="$(echo $CI_BUILD_REF | cut -c 1-8)"  /root/charts/eni/spring-boot-1.0.0.tgz --namespace ${NAMESPACE}
+    - fi
+    - mkdir -p artifacts
+    - echo "${NAMESPACE}" > ./artifacts/namespace
+  artifacts:
+    paths:
+      - artifacts 
+    expire_in: 1 hrs	
+  only:
+   - master
+  when: manual   
+
+
+deploy_api:
+  image: ${json_interpreter_4_pipeline_image}
+  stage: deploy_api
+  script:
+    - NAMESPACE=$(cat ./artifacts/namespace)
+    - cat ./artifacts/namespace
+    #- PROJECT_VERSION=$(xmllint --xpath "//*[local-name()='project']/*[local-name()='version']/text()" pom.xml | grep -E '^(\d+\.)(\d+)' -o)
+    - echo ${NAMESPACE}
+    - DEPLOYMENT_NAME=${NAMESPACE}-${CI_PROJECT_NAME}
+    - echo ${DEPLOYMENT_NAME}
+    #- echo ${deploy_api} | base64 -d > deployapiscript.sh
+    - chmod 777 deployapiscript.sh
+    - bash ./deployapiscript.sh $NAMESPACE-$CI_PROJECT_NAME $PROJECT_VERSION "${DEPLOYMENT_NAME}" $NAMESPACE ${api_gw_url}
+  when: manual

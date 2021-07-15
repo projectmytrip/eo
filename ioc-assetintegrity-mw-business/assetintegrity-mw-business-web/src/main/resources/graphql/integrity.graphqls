@@ -1,0 +1,39 @@
+extend type Query {    
+    EVPMSTable(asset: String!, area: String): EVPMSTableType
+    JacketedPipesTable(asset: String!, area: String): JacketPipesTableType
+}
+
+type EVPMSTableType {
+    high: Int
+    critical: Int
+    data: [EVPMSData]
+}
+
+type EVPMSData  {
+    dorsal: String
+    station: String
+    status: String
+    diagnostic: String
+    leakDetection: String
+    chainage: String
+    longitude: String
+    latitude: String 
+    eventDate: String
+    type: String
+}
+
+
+type JacketPipesTableType {
+    high: Int
+    critical: Int
+    data: [JacketPipes]
+}
+
+type JacketPipes {
+    alarm: Int
+    badActive: Int
+    tag: String
+    deltaP: String
+    subArea: String
+    description: String
+}

@@ -1,0 +1,58 @@
+
+extend type Query {    
+    corrosionKpi(asset: String!): [CorrosionKpi]
+    criticalSignalsOperationalKpi(asset: String!): CriticalSignalsOperationalKpi
+    backlogOperationalKpi(asset: String!): BacklogOperationalKpi
+    operatingWindowKpi(asset: String!): [OperatingWindowKpi]
+    integrityOperatingWindowKpi(asset: String!) : [IntegrityOperatingWindowKpi]
+}
+
+type CorrosionKpi {
+    name: String
+    value: String
+    asset: String
+    insertionDate: String
+}
+
+type CriticalSignalsOperationalKpi {
+    sce1Count: Int
+    sce2Count: Int
+    sce3Count: Int
+    sceXCount: Int
+    blockedCount: Int
+    totalCount: Int
+    approvedMocCount: Int
+    requestedMocCount: Int
+    mocCount: Int
+}
+
+type BacklogOperationalKpi {
+    odmTotalCount: Int
+    odmCount: Int
+    sce1Count: Int
+    sce2Count: Int
+    sce3Count: Int
+    otherCount: Int
+    fromDate: String
+}
+
+
+type OperatingWindowKpi {
+     name: String
+     state: Int
+     outHour : Float
+     linkVision : String
+     insertionDate : String
+     asset : String
+ }
+
+ type IntegrityOperatingWindowKpi {
+     name: String
+     iow: Float
+     iowOk : Float
+     iowOut: Float
+     iowWarning: Float
+     linkVision : String
+     insertionDate : String
+     asset : String
+ }
