@@ -1,0 +1,2 @@
+java 8 - parallel stream
+	https://github.com/Java-Techie-jt/java8
